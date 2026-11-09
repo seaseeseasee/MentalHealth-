@@ -425,6 +425,35 @@ h1, h2, h3 { font-family: var(--font-head); font-weight: 500; margin: 0; line-he
 @media (max-width: 899px) { .hide-sm { display: none !important; } }
 @media (min-width: 900px) { .show-sm { display: none !important; } }
 
+/* ---- Home (signed in): same hero language as the landing page ---- */
+.home .hero { margin-top: 0; }
+.home-title { font-size: clamp(32px, 4.6vw, 48px); }
+.home .feature .chip { flex-shrink: 0; }
+.home-row { display: grid; gap: 16px; grid-template-columns: minmax(0, 1fr); }
+.home-tip { position: relative; overflow: hidden; display: flex; align-items: center; gap: 12px; background: var(--butter-50); border-radius: 24px; padding: 16px 18px; text-decoration: none; color: #5C4300; min-height: 120px; }
+.home-tip:hover { color: #5C4300; }
+.home-tip b { display: block; font-family: var(--font-head); font-weight: 500; font-size: 17px; color: var(--ink); }
+.home-tip span span { display: block; font-size: 14px; line-height: 1.55; }
+.home-tip-link { margin-top: 6px; font-weight: 600; color: var(--lav-600); }
+.home-tip img { width: 72px; height: auto; flex-shrink: 0; align-self: flex-end; margin-bottom: -6px; }
+@media (min-width: 900px) {
+  .home-row { grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr); }
+}
+@media (max-width: 640px) {
+  .home .hero { padding: 20px 16px 18px; }
+  .home .hero-grid { flex-wrap: nowrap; align-items: flex-end; gap: 4px; }
+  .home .hero-copy { flex: 1 1 auto; }
+  .home .hero-art { flex: 0 0 120px; min-height: 0; }
+  .home .hero-art img { width: 120px; }
+  .home .hero-bubble, .home .hero-meta, .home .hero-lead { display: none; }
+  .home-title { font-size: 26px; }
+  .home .hero-features { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin-top: 12px; }
+  .home .hero-features > :last-child { grid-column: 1 / -1; }
+  .home .feature { padding: 10px 12px; gap: 10px; }
+  .home .feature .icon-circle { width: 38px; height: 38px; }
+  .home .hero-cta { margin-top: 14px; }
+}
+
 /* ---- Landing page ---- */
 .landing { background: var(--cream); min-height: 100dvh; }
 .landing-wrap { max-width: 1200px; margin: 0 auto; padding-left: 20px; padding-right: 20px; }
