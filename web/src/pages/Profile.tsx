@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import type { Sex } from '../../../shared/assessments.ts';
-import { api, thaiDate } from '../api.ts';
+import { api, isStaff, thaiDate } from '../api.ts';
 import { useAuth } from '../auth.tsx';
 import { Avatar, DEFAULT_AVATAR, type AvatarConfig } from '../components/Avatar.tsx';
 import { Icon } from '../components/Icon.tsx';
@@ -126,7 +126,14 @@ export function Profile() {
 
       <section className="card" aria-labelledby="pdpa-h" style={{ padding: '14px 14px 4px' }}>
         <h2 id="pdpa-h" className="h2 row" style={{ fontSize: 16, gap: 8 }}><span className="ink-mint"><Icon name="shield" /></span>ความเป็นส่วนตัวและข้อมูล (PDPA)</h2>
-        <p className="caption muted" style={{ margin: '6px 0 0' }}>ให้ความยินยอมเมื่อ {thaiDate(user.consentAt)} · ข้อมูลของคุณใช้เพื่อแสดงผลให้คุณเท่านั้น</p>
+        <p className="caption muted" style={{ margin: '6px 0 0' }}>ให้ความยินยอมเมื่อ {thaiDate(user.consentAt)} · ผลรายบุคคลแสดงให้คุณเท่านั้น ผู้ดูแลระบบเห็นเฉพาะสถิติภาพรวมที่ไม่ระบุตัวบุคคล</p>
+        {isStaff(user) && (
+          <Link className="settings-row" to="/admin">
+            <span className="icon-tile tint-lav ink-lav" style={{ width: 36, height: 36, borderRadius: 12 }}><Icon name="chart" size={18} /></span>
+            <span className="grow" style={{ fontSize: 15 }}>แดชบอร์ดผู้ดูแลระบบ</span>
+            <Icon name="next" size={16} />
+          </Link>
+        )}
         <a className="settings-row" href="/api/me/export" download="mindease-data.json">
           <span className="icon-tile tint-mint ink-mint" style={{ width: 36, height: 36, borderRadius: 12 }}><Icon name="download" size={18} /></span>
           <span className="grow" style={{ fontSize: 15 }}>ดาวน์โหลดข้อมูลของฉัน (JSON)</span>

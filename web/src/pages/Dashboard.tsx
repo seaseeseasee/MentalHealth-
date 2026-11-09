@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { getAssessment } from '../../../shared/assessments.ts';
-import { api, thaiDate, useLiveData, type Stats } from '../api.ts';
+import { ASSESSMENTS, getAssessment } from '../../../shared/assessments.ts';
+import { api, isStaff, thaiDate, useLiveData, type Stats } from '../api.ts';
 import { useAuth } from '../auth.tsx';
 import { Avatar } from '../components/Avatar.tsx';
 import { Icon } from '../components/Icon.tsx';
-import { LevelChip, TINTS } from '../components/ui.tsx';
+import { ACCENTS, AssessmentIcon, LevelChip } from '../components/ui.tsx';
 
 const MOODS = [
   { label: 'แย่มาก', fill: '#F6C1C9', mouth: 'M9 17q3-3 6 0' },
@@ -15,7 +15,11 @@ const MOODS = [
   { label: 'ดีมาก', fill: '#BFE8D6', mouth: 'M8.5 14.5q3.5 4 7 0' }
 ];
 
-const POPULAR = ['thi15', 'st5', 'phq9', 'burnout'];
+/** Short names that fit the 3-column tile grid. */
+const SHORT: Record<string, string> = {
+  thi15: 'ความสุข', st5: 'ความเครียด', phq9: 'ซึมเศร้า', eq: 'ความฉลาดทางอารมณ์', rq: 'พลังสุขภาพจิต',
+  auditc: 'แอลกอฮอล์', digital: 'เกม/หน้าจอ', memory: 'ความจำ/สมาธิ', burnout: 'ภาวะหมดไฟ'
+};
 
 function greeting(): string {
   const h = new Date().getHours();
@@ -29,12 +33,14 @@ export function Dashboard() {
   const [stats, setStats] = useState<Stats | null>(null);
   const [mood, setMood] = useState<number | null>(null);
   const [savingMood, setSavingMood] = useState(false);
+  const [disabled, setDisabled] = useState<string[]>([]);
 
   useLiveData(() => {
     api.stats().then((s) => {
       setStats(s);
       setMood(s.todayMood);
     }).catch(() => undefined);
+    api.availability().then((r) => setDisabled(r.disabled)).catch(() => undefined);
   });
 
   async function pickMood(i: number) {
@@ -54,13 +60,17 @@ export function Dashboard() {
 
   return (
     <main className="screen">
-      <header className="row">
-        <Avatar config={user?.avatar} size={52} bg="var(--peach-50)" />
-        <div className="grow">
+      <header className="card card-lg row" style={{ background: 'linear-gradient(160deg, #DDEBFF, #F4F9FF)', padding: '0 0 0 18px', overflow: 'hidden', alignItems: 'flex-end', minHeight: 140 }}>
+        <div className="grow" style={{ alignSelf: 'center', padding: '16px 0' }}>
           <div className="small muted">{greeting()}</div>
-          <div style={{ fontFamily: 'var(--font-head)', fontWeight: 500, fontSize: 21 }}>คุณ{user?.displayName}</div>
+          <div style={{ fontFamily: 'var(--font-head)', fontWeight: 500, fontSize: 22, color: 'var(--heading)' }}>คุณ{user?.displayName}</div>
+          {isStaff(user) && (
+            <Link to="/admin" className="chip" style={{ marginTop: 8, background: 'var(--lav-600)', color: '#fff', textDecoration: 'none' }}>
+              <Icon name="chart" size={14} />แดชบอร์ดผู้ดูแลระบบ
+            </Link>
+          )}
         </div>
-        <Link to="/profile" className="icon-btn" aria-label="ตั้งค่าการแจ้งเตือน"><Icon name="bell" /></Link>
+        <img src="/illustrations/wave.webp" alt="" width="160" height="171" style={{ width: 'min(160px, 42%)', height: 'auto', display: 'block' }} />
       </header>
 
       <section className="card" aria-labelledby="mood-h">
@@ -72,9 +82,9 @@ export function Dashboard() {
           {MOODS.map((m, i) => (
             <button key={m.label} type="button" className="mood-btn" aria-pressed={mood === i} onClick={() => pickMood(i)}>
               <svg width="36" height="36" viewBox="0 0 24 24" aria-hidden="true">
-                <circle cx="12" cy="12" r="10" fill={m.fill} stroke="#3A2E2A" strokeWidth="1.6" />
-                <circle cx="9" cy="10" r="1.2" fill="#3A2E2A" /><circle cx="15" cy="10" r="1.2" fill="#3A2E2A" />
-                <path d={m.mouth} fill="none" stroke="#3A2E2A" strokeWidth="1.6" strokeLinecap="round" />
+                <circle cx="12" cy="12" r="10" fill={m.fill} stroke="#1B2B45" strokeWidth="1.6" />
+                <circle cx="9" cy="10" r="1.2" fill="#1B2B45" /><circle cx="15" cy="10" r="1.2" fill="#1B2B45" />
+                <path d={m.mouth} fill="none" stroke="#1B2B45" strokeWidth="1.6" strokeLinecap="round" />
               </svg>
               {m.label}
             </button>
@@ -101,7 +111,7 @@ export function Dashboard() {
 
       {latest && latestDef ? (
         <Link to={`/results/${latest.id}`} className="list-link" style={{ borderRadius: 20, padding: '12px 14px' }}>
-          <span className={`icon-tile ${TINTS[latestDef.id].tint} ${TINTS[latestDef.id].ink}`}><Icon name={latestDef.icon} size={22} /></span>
+          <AssessmentIcon id={latestDef.id} icon={latestDef.icon} size={44} />
           <span className="grow">
             <span className="caption muted" style={{ display: 'block' }}>ผลล่าสุด · {thaiDate(latest.createdAt)}</span>
             <span style={{ display: 'block', fontFamily: 'var(--font-head)', fontSize: 16 }}>{latestDef.code} · {latest.score}/{latest.max}</span>
@@ -117,21 +127,16 @@ export function Dashboard() {
 
       <section>
         <div className="row" style={{ justifyContent: 'space-between', marginBottom: 10 }}>
-          <h2 className="h2">แบบประเมินยอดนิยม</h2>
-          <Link to="/assessments" className="small" style={{ fontWeight: 600, textDecoration: 'none', padding: '6px 0' }}>ดูทั้งหมด</Link>
+          <h2 className="h2">แบบประเมิน</h2>
+          <Link to="/assessments" className="small" style={{ fontWeight: 600, textDecoration: 'none', padding: '6px 0' }}>ดูทั้งหมด ›</Link>
         </div>
-        <div className="hscroll">
-          {POPULAR.map((id) => {
-            const a = getAssessment(id)!;
-            return (
-              <Link key={id} to={`/assessments/${id}`} className={TINTS[id].tint}
-                style={{ flex: '0 0 136px', borderRadius: 20, padding: 14, textDecoration: 'none', color: 'var(--ink)', display: 'flex', flexDirection: 'column', gap: 8 }}>
-                <span className={`icon-btn ${TINTS[id].ink}`} style={{ border: 0, width: 38, height: 38 }}><Icon name={a.icon} /></span>
-                <span style={{ fontFamily: 'var(--font-head)', fontSize: 15, lineHeight: 1.3 }}>{a.name}</span>
-                <span className="caption" style={{ color: '#5E534D' }}>{a.code} · {a.items.length} ข้อ · {a.minutes} นาที</span>
-              </Link>
-            );
-          })}
+        <div className="tile-grid">
+          {ASSESSMENTS.filter((a) => !disabled.includes(a.id)).map((a) => (
+            <Link key={a.id} to={`/assessments/${a.id}`} className="tile" style={{ background: ACCENTS[a.id].tint }} aria-label={`${a.name} (${a.code})`}>
+              <AssessmentIcon id={a.id} icon={a.icon} size={44} />
+              {SHORT[a.id] ?? a.name}
+            </Link>
+          ))}
         </div>
       </section>
 

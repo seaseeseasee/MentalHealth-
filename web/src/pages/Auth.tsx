@@ -108,8 +108,9 @@ export function Register() {
         <div className="card tint-butter" style={{ boxShadow: 'none', fontSize: 14, lineHeight: 1.6, color: '#5C4510' }}>
           <strong style={{ fontFamily: 'var(--font-head)', fontWeight: 500 }}>ความเป็นส่วนตัวของคุณ (PDPA)</strong>
           <p style={{ margin: '4px 0 10px' }}>
-            เราเก็บคำตอบ ผลการประเมิน และบันทึกอารมณ์ของคุณ เพื่อแสดงผลและแนวโน้มให้คุณเท่านั้น
-            ไม่เปิดเผยต่อบุคคลอื่น คุณดาวน์โหลดหรือลบข้อมูลทั้งหมดได้ทุกเมื่อจากหน้าโปรไฟล์
+            เราเก็บคำตอบ ผลการประเมิน และบันทึกอารมณ์ของคุณ เพื่อแสดงผลและแนวโน้มให้คุณ
+            ผู้ดูแลระบบเห็นเฉพาะสถิติภาพรวมที่ไม่ระบุตัวบุคคล (เช่น จำนวนผู้ทำแบบประเมินในแต่ละระดับ) เพื่อปรับปรุงบริการ
+            ไม่เปิดเผยคำตอบหรือผลรายบุคคลต่อผู้อื่น คุณดาวน์โหลดหรือลบข้อมูลทั้งหมดได้ทุกเมื่อจากหน้าโปรไฟล์
           </p>
           <label className="row" style={{ gap: 10, cursor: 'pointer', alignItems: 'flex-start' }}>
             <input type="checkbox" className="switch" checked={consent} onChange={(e) => setConsent(e.target.checked)} required style={{ marginTop: 2 }} />

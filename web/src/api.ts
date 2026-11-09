@@ -11,6 +11,7 @@ export interface User {
   notifyMood: boolean;
   consentAt: string;
   createdAt: string;
+  role: 'user' | 'analyst' | 'admin';
 }
 
 export interface Result {
@@ -42,7 +43,7 @@ export class ApiError extends Error {
   }
 }
 
-async function request<T>(method: string, path: string, body?: unknown): Promise<T> {
+export async function request<T>(method: string, path: string, body?: unknown): Promise<T> {
   const res = await fetch(`/api${path}`, {
     method,
     credentials: 'same-origin',
@@ -64,14 +65,18 @@ export const api = {
   updateProfile: (body: Partial<{ displayName: string; avatar: AvatarConfig; notifyMood: boolean; sex: Sex | null }>) =>
     request<{ user: User }>('PUT', '/profile', body),
   deleteAccount: () => request<{ ok: true }>('DELETE', '/me'),
-  submitResult: (body: { assessmentId: string; answers: number[]; sex?: Sex | null }) =>
+  submitResult: (body: { assessmentId: string; answers: number[]; sex?: Sex | null; attemptId?: number }) =>
     request<{ result: Result }>('POST', '/results', body),
   results: (assessmentId?: string) =>
     request<{ results: Result[] }>('GET', `/results${assessmentId ? `?assessmentId=${encodeURIComponent(assessmentId)}` : ''}`),
   result: (id: string | number) => request<{ result: Result }>('GET', `/results/${id}`),
   setMood: (mood: number) => request<{ day: string; mood: number }>('PUT', '/moods/today', { mood }),
-  stats: () => request<Stats>('GET', '/stats')
+  stats: () => request<Stats>('GET', '/stats'),
+  startAttempt: (assessmentId: string) => request<{ attemptId: number }>('POST', '/attempts', { assessmentId }),
+  availability: () => request<{ disabled: string[] }>('GET', '/assessments/availability')
 };
+
+export const isStaff = (u: User | null | undefined) => u?.role === 'admin' || u?.role === 'analyst';
 
 /** Runs `load` now, and again whenever the user comes back to this tab or window. */
 export function useLiveData(load: () => void, deps: unknown[] = []) {

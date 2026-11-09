@@ -1,6 +1,6 @@
 import { createContext, useCallback, useContext, useState, type ReactNode } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
-import { api, ApiError, useLiveData, type User } from './api.ts';
+import { api, ApiError, isStaff, useLiveData, type User } from './api.ts';
 import { Loading } from './components/ui.tsx';
 import { clearAllDrafts } from './pages/Questionnaire.tsx';
 
@@ -46,5 +46,15 @@ export function RequireAuth({ children }: { children: ReactNode }) {
   const location = useLocation();
   if (loading) return <Loading />;
   if (!user) return <Navigate to="/login" replace state={{ from: location.pathname }} />;
+  return <>{children}</>;
+}
+
+/** Admin and analyst accounts only. Everyone else is sent to their home page. The API enforces the same rule. */
+export function RequireStaff({ children }: { children: ReactNode }) {
+  const { user, loading } = useAuth();
+  const location = useLocation();
+  if (loading) return <Loading />;
+  if (!user) return <Navigate to="/login" replace state={{ from: location.pathname }} />;
+  if (!isStaff(user)) return <Navigate to="/home" replace />;
   return <>{children}</>;
 }

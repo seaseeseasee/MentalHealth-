@@ -1,6 +1,6 @@
 import { useEffect, type ReactNode } from 'react';
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
-import { RequireAuth, useAuth } from './auth.tsx';
+import { RequireAuth, RequireStaff, useAuth } from './auth.tsx';
 import { BottomNav, Loading } from './components/ui.tsx';
 import { Welcome } from './pages/Welcome.tsx';
 import { Login, Register } from './pages/Auth.tsx';
@@ -12,6 +12,13 @@ import { ResultPage } from './pages/ResultPage.tsx';
 import { History } from './pages/History.tsx';
 import { SelfCare } from './pages/SelfCare.tsx';
 import { Profile } from './pages/Profile.tsx';
+import { AdminLayout } from './admin/AdminLayout.tsx';
+import { Overview } from './admin/Overview.tsx';
+import { UserStats } from './admin/UserStats.tsx';
+import { AssessmentStats } from './admin/AssessmentStats.tsx';
+import { RiskAnalytics } from './admin/RiskAnalytics.tsx';
+import { Reports } from './admin/Reports.tsx';
+import { AssessmentConfig, Roles, Settings } from './admin/Manage.tsx';
 
 function WithNav({ children }: { children: ReactNode }) {
   return (
@@ -51,6 +58,16 @@ export function App() {
         <Route path="/history" element={<WithNav><History /></WithNav>} />
         <Route path="/care" element={<WithNav><SelfCare /></WithNav>} />
         <Route path="/profile" element={<WithNav><Profile /></WithNav>} />
+        <Route path="/admin" element={<RequireStaff><AdminLayout /></RequireStaff>}>
+          <Route index element={<Overview />} />
+          <Route path="users" element={<UserStats />} />
+          <Route path="assessments" element={<AssessmentStats />} />
+          <Route path="risk" element={<RiskAnalytics />} />
+          <Route path="reports" element={<Reports />} />
+          <Route path="assessment-config" element={<AssessmentConfig />} />
+          <Route path="roles" element={<Roles />} />
+          <Route path="settings" element={<Settings />} />
+        </Route>
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </div>

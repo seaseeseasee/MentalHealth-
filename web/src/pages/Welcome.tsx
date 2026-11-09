@@ -1,55 +1,122 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Avatar } from '../components/Avatar.tsx';
+import { ASSESSMENTS, CATEGORIES, type CategoryId } from '../../../shared/assessments.ts';
 import { Icon } from '../components/Icon.tsx';
+import { ACCENTS } from '../components/ui.tsx';
+
+const TOTAL_ITEMS = ASSESSMENTS.reduce((s, a) => s + a.items.length, 0);
+const CAT_LABELS: Record<CategoryId, string> = { mood: 'อารมณ์', strength: 'จุดแข็งทางใจ', life: 'พฤติกรรม', work: 'สมอง/งาน' };
+
+const FEATURES = [
+  { icon: 'tests', bg: '#1E63C4', title: 'ประเมินง่าย', text: 'ตอบทีละข้อ ใช้ได้ทุกที่' },
+  { icon: 'clock', bg: '#7A58D6', title: 'ใช้เวลาไม่นาน', text: 'ชุดละ 1–5 นาที' },
+  { icon: 'shield', bg: '#2E9E62', title: 'ปลอดภัย', text: 'ข้อมูลเป็นความลับ' }
+];
 
 export function Welcome() {
+  const [cat, setCat] = useState<CategoryId | 'all'>('all');
+  const shown = ASSESSMENTS.filter((a) => cat === 'all' || a.category === cat);
+
   return (
-    <main className="screen no-nav" style={{ gap: 0 }}>
-      <header className="row" style={{ justifyContent: 'space-between', minHeight: 44 }}>
-        <div className="row" style={{ gap: 8 }}>
-          <img src="/favicon.svg" width="30" height="30" alt="" />
-          <span style={{ fontFamily: 'var(--font-head)', fontWeight: 500, fontSize: 20 }}>MindEase</span>
+    <div className="landing">
+      <header className="landing-header">
+        <div className="landing-wrap landing-header-row">
+          <Link to="/" className="brand">
+            <span className="brand-mark"><Icon name="sprout" size={22} /></span>
+            <span>
+              <span className="brand-name">MindEase</span>
+              <span className="brand-sub">ระบบประเมินสุขภาพจิตเบื้องต้น</span>
+            </span>
+          </Link>
+          <nav aria-label="เมนูหลัก" className="landing-nav">
+            <a href="#assessments">แบบประเมิน</a>
+            <a href="#before">ก่อนเริ่มประเมิน</a>
+          </nav>
+          <Link to="/login" className="btn btn-primary landing-login">เข้าสู่ระบบ</Link>
         </div>
-        <Link to="/login" className="small" style={{ color: 'var(--muted)', textDecoration: 'none', padding: '12px 4px' }}>เข้าสู่ระบบ</Link>
       </header>
 
-      <div style={{ position: 'relative', height: 320, marginTop: 8, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <svg viewBox="0 0 342 320" width="100%" height="320" aria-hidden="true" style={{ position: 'absolute', inset: 0 }} preserveAspectRatio="xMidYMid meet">
-          <path d="M171 26 C240 20 304 66 310 146 C316 228 262 296 176 300 C92 304 34 250 32 168 C30 88 98 32 171 26 Z" fill="#FFE3D3" />
-          <path d="M44 84 C44 54 68 42 92 44 C92 70 72 86 44 84 Z" fill="#BFE8D6" stroke="#2F7458" strokeWidth="2.5" strokeLinejoin="round" />
-          <path d="M48 80 L80 54" stroke="#2F7458" strokeWidth="2" strokeLinecap="round" />
-          <circle cx="300" cy="58" r="11" fill="#D9CCF5" />
-          <circle cx="38" cy="256" r="14" fill="#D9CCF5" />
-          <circle cx="296" cy="270" r="7" fill="#FFD27A" />
-          <path d="M238 300 c10 -10 20 10 30 0 s20 10 30 0" fill="none" stroke="#E9825F" strokeWidth="2.5" strokeLinecap="round" />
-          <path d="M58 168 v14 M51 175 h14 M284 184 v10 M279 189 h10" stroke="#6B54C4" strokeWidth="2.5" strokeLinecap="round" />
-        </svg>
-        <div style={{ position: 'relative', marginTop: 30 }}>
-          <Avatar size={210} label="เพื่อนคู่ใจของ MindEase" />
+      <main>
+        <div className="landing-wrap" style={{ paddingTop: 24 }}>
+          <section className="hero">
+            <div className="hero-grid">
+              <div className="hero-copy">
+                <h1 className="hero-title">แบบประเมิน<br /><span>สุขภาพจิต</span></h1>
+                <p className="hero-lead">ดูแลใจ…ให้แข็งแรง</p>
+                <p className="hero-sub">เริ่มได้จากการประเมินตัวเอง</p>
+                <p className="hero-meta">แบบประเมิน {ASSESSMENTS.length} ด้าน รวม {TOTAL_ITEMS} ข้อคำถาม</p>
+              </div>
+              <div className="hero-art">
+                <div className="hero-bubble">สุขภาพจิตดี<br />เริ่มได้จากการดูแลใจ<br />ในทุกวัน <span style={{ color: '#E5566F' }}>♥</span></div>
+                <img src="/illustrations/hug.webp" alt="ตัวละครคู่ใจ MindEase กอดหัวใจ" width="382" height="495" />
+              </div>
+            </div>
+
+            <div className="hero-features">
+              {FEATURES.map((f) => (
+                <div key={f.title} className="feature">
+                  <span className="icon-circle" style={{ background: f.bg }}><Icon name={f.icon} size={22} /></span>
+                  <span><b>{f.title}</b><span>{f.text}</span></span>
+                </div>
+              ))}
+            </div>
+
+            <div className="hero-cta">
+              <Link to="/register" className="btn btn-primary btn-lg">เริ่มทำแบบประเมิน <Icon name="arrow" size={20} strokeWidth={2.4} /></Link>
+              <span className="small">มีบัญชีแล้ว? <Link to="/login" style={{ fontWeight: 600 }}>เข้าสู่ระบบ</Link></span>
+            </div>
+          </section>
         </div>
-        <div className="bubble" style={{ position: 'absolute', top: 6, right: 0 }}>สวัสดีนะ!<br />วันนี้ใจเป็นยังไงบ้าง?</div>
-      </div>
 
-      <h1 className="h-display" style={{ margin: '24px 0 8px' }}>พื้นที่ปลอดภัย<br />สำหรับดูแลใจคุณ</h1>
-      <p className="muted" style={{ margin: 0, lineHeight: 1.65 }}>
-        เช็กสุขภาพใจด้วยแบบประเมิน 9 ชุด พร้อมเพื่อนคู่ใจที่อยู่ข้างคุณทุกขั้นตอน
-      </p>
+        <section id="assessments" className="landing-wrap landing-section">
+          <span className="eyebrow"><span />เลือกแบบประเมินที่ตรงกับคุณ</span>
+          <div className="section-head">
+            <h2>แบบประเมินสุขภาพจิต {ASSESSMENTS.length} ประเภท</h2>
+            <div className="seg" role="group" aria-label="กรองตามหมวด">
+              <button type="button" aria-pressed={cat === 'all'} onClick={() => setCat('all')}>ทั้งหมด</button>
+              {CATEGORIES.map((c) => (
+                <button key={c.id} type="button" aria-pressed={cat === c.id} onClick={() => setCat(c.id)}>{CAT_LABELS[c.id]}</button>
+              ))}
+            </div>
+          </div>
+          <p className="section-sub">ทำได้ฟรี ใช้เวลาชุดละ 1–5 นาที ผลเป็นการคัดกรองเบื้องต้นพร้อมคำแนะนำทันที</p>
 
-      <div className="row" style={{ flexWrap: 'wrap', gap: 8, marginTop: 14 }}>
-        <span className="chip" style={{ background: '#fff', border: '1px solid var(--line)', fontWeight: 400 }}><span className="ink-lav"><Icon name="tests" size={16} /></span>9 แบบประเมิน</span>
-        <span className="chip" style={{ background: '#fff', border: '1px solid var(--line)', fontWeight: 400 }}><span className="ink-mint"><Icon name="clock" size={16} /></span>1–5 นาที</span>
-        <span className="chip" style={{ background: '#fff', border: '1px solid var(--line)', fontWeight: 400 }}><span className="ink-peach"><Icon name="lock" size={16} /></span>ข้อมูลปลอดภัย PDPA</span>
-      </div>
+          <div className="tcard-grid">
+            {shown.map((a) => {
+              const acc = ACCENTS[a.id];
+              return (
+                <Link key={a.id} to={`/assessments/${a.id}`} className="tcard">
+                  <span className="tcard-blob" style={{ background: acc.tint }} aria-hidden="true" />
+                  <span className="tcard-top">
+                    <span className="tcard-icon" style={{ background: acc.c, boxShadow: `0 8px 18px ${acc.c}47` }}><Icon name={a.icon} size={28} /></span>
+                    <span className="tcard-code">{a.code}</span>
+                  </span>
+                  <span className="tcard-name">{a.name}</span>
+                  <span className="tcard-desc">{a.intro}</span>
+                  <span className="tcard-meta">
+                    <span><Icon name="tests" size={16} />{a.items.length} ข้อ</span>
+                    <span><Icon name="clock" size={16} />{a.minutes} นาที</span>
+                    {a.status === 'draft' && <span className="chip level-mild" style={{ fontSize: 12, padding: '2px 8px' }}>ฉบับทดลอง</span>}
+                    <span className="tcard-go"><Icon name="arrow" size={18} strokeWidth={2.4} /></span>
+                  </span>
+                </Link>
+              );
+            })}
+          </div>
+        </section>
 
-      <div style={{ flexGrow: 1, minHeight: 24 }} />
+        <section id="before" className="landing-wrap landing-section" style={{ paddingTop: 8 }}>
+          <div className="before-card">
+            <span className="icon-circle" style={{ background: '#FFE9A6', color: '#7A5200' }}><Icon name="bulb" size={22} /></span>
+            <p><b>คำแนะนำก่อนประเมิน</b> ตอบตามความรู้สึกจริงในช่วงที่ผ่านมา ไม่มีคำตอบถูกหรือผิด ผลเป็นการคัดกรองเบื้องต้น ไม่ใช่การวินิจฉัยทางการแพทย์</p>
+            <a href="tel:1323" className="hotline"><Icon name="phone" size={18} />สายด่วนสุขภาพจิต 1323</a>
+          </div>
+        </section>
+      </main>
 
-      <Link to="/register" className="btn btn-primary btn-lg btn-block">เริ่มต้นเลย <Icon name="arrow" size={20} strokeWidth={2.5} /></Link>
-      <p className="small muted" style={{ textAlign: 'center', margin: '12px 0 0' }}>
-        มีบัญชีอยู่แล้ว? <Link to="/login" style={{ fontWeight: 600 }}>เข้าสู่ระบบ</Link>
-      </p>
-      <p className="caption muted" style={{ textAlign: 'center', margin: '10px 0 0' }}>
-        ผลการประเมินใช้เพื่อคัดกรองเบื้องต้น ไม่ใช่การวินิจฉัยทางการแพทย์
-      </p>
-    </main>
+      <footer className="landing-footer">
+        <div className="landing-wrap">ผลการประเมินใช้เพื่อคัดกรองเบื้องต้นเท่านั้น ไม่ใช่การวินิจฉัยทางการแพทย์ · ข้อมูลของคุณได้รับการคุ้มครองตาม พ.ร.บ.คุ้มครองข้อมูลส่วนบุคคล</div>
+      </footer>
+    </div>
   );
 }
