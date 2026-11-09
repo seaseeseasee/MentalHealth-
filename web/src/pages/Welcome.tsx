@@ -1,11 +1,9 @@
-import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ASSESSMENTS, CATEGORIES, type CategoryId } from '../../../shared/assessments.ts';
+import { ASSESSMENTS } from '../../../shared/assessments.ts';
+import { AssessmentCards } from '../components/AssessmentCards.tsx';
 import { Icon } from '../components/Icon.tsx';
-import { ACCENTS } from '../components/ui.tsx';
 
 const TOTAL_ITEMS = ASSESSMENTS.reduce((s, a) => s + a.items.length, 0);
-const CAT_LABELS: Record<CategoryId, string> = { mood: 'อารมณ์', strength: 'จุดแข็งทางใจ', life: 'พฤติกรรม', work: 'สมอง/งาน' };
 
 const FEATURES = [
   { icon: 'tests', bg: '#1E63C4', title: 'ประเมินง่าย', text: 'ตอบทีละข้อ ใช้ได้ทุกที่' },
@@ -14,9 +12,6 @@ const FEATURES = [
 ];
 
 export function Welcome() {
-  const [cat, setCat] = useState<CategoryId | 'all'>('all');
-  const shown = ASSESSMENTS.filter((a) => cat === 'all' || a.category === cat);
-
   return (
     <div className="landing">
       <header className="landing-header">
@@ -69,40 +64,7 @@ export function Welcome() {
         </div>
 
         <section id="assessments" className="landing-wrap landing-section">
-          <span className="eyebrow"><span />เลือกแบบประเมินที่ตรงกับคุณ</span>
-          <div className="section-head">
-            <h2>แบบประเมินสุขภาพจิต {ASSESSMENTS.length} ประเภท</h2>
-            <div className="seg" role="group" aria-label="กรองตามหมวด">
-              <button type="button" aria-pressed={cat === 'all'} onClick={() => setCat('all')}>ทั้งหมด</button>
-              {CATEGORIES.map((c) => (
-                <button key={c.id} type="button" aria-pressed={cat === c.id} onClick={() => setCat(c.id)}>{CAT_LABELS[c.id]}</button>
-              ))}
-            </div>
-          </div>
-          <p className="section-sub">ทำได้ฟรี ใช้เวลาชุดละ 1–5 นาที ผลเป็นการคัดกรองเบื้องต้นพร้อมคำแนะนำทันที</p>
-
-          <div className="tcard-grid">
-            {shown.map((a) => {
-              const acc = ACCENTS[a.id];
-              return (
-                <Link key={a.id} to={`/assessments/${a.id}`} className="tcard">
-                  <span className="tcard-blob" style={{ background: acc.tint }} aria-hidden="true" />
-                  <span className="tcard-top">
-                    <span className="tcard-icon" style={{ background: acc.c, boxShadow: `0 8px 18px ${acc.c}47` }}><Icon name={a.icon} size={28} /></span>
-                    <span className="tcard-code">{a.code}</span>
-                  </span>
-                  <span className="tcard-name">{a.name}</span>
-                  <span className="tcard-desc">{a.intro}</span>
-                  <span className="tcard-meta">
-                    <span><Icon name="tests" size={16} />{a.items.length} ข้อ</span>
-                    <span><Icon name="clock" size={16} />{a.minutes} นาที</span>
-                    {a.status === 'draft' && <span className="chip level-mild" style={{ fontSize: 12, padding: '2px 8px' }}>ฉบับทดลอง</span>}
-                    <span className="tcard-go"><Icon name="arrow" size={18} strokeWidth={2.4} /></span>
-                  </span>
-                </Link>
-              );
-            })}
-          </div>
+          <AssessmentCards />
         </section>
 
         <section id="before" className="landing-wrap landing-section" style={{ paddingTop: 8 }}>
