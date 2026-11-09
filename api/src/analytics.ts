@@ -67,6 +67,20 @@ export function suppress(n: number, min = minGroupSize()): number | null {
   return n > 0 && n < min ? null : n;
 }
 
+/**
+ * Suppresses small cells in a group whose total is shown. If only one cell were hidden, it could be recovered as
+ * total − (shown cells), so the smallest other non-zero cell is hidden as well (secondary suppression).
+ */
+export function suppressGroup(counts: number[], min = minGroupSize()): (number | null)[] {
+  const out = counts.map((c) => suppress(c, min));
+  if (out.filter((v) => v === null).length === 1) {
+    let pick = -1;
+    out.forEach((v, i) => { if (v !== null && v > 0 && (pick < 0 || v < (out[pick] as number))) pick = i; });
+    if (pick >= 0) out[pick] = null;
+  }
+  return out;
+}
+
 function periodExpr(g: Granularity, col: string): string {
   const fmt = g === 'day' ? '%Y-%m-%d' : g === 'month' ? '%Y-%m' : '%Y';
   return `strftime('${fmt}', ${col}, '${TZ}')`;
@@ -296,18 +310,19 @@ export function riskStats(r: Range, g: Granularity, assessmentId?: string) {
     }
     const n = [...counts.values()].reduce((s, v) => s + v, 0);
     const hidden = n > 0 && n < min;
-    const bands: BandSummary[] = bandRanges(id).map((b) => {
-      const c = counts.get(b.label) ?? 0;
-      const sc = hidden ? null : suppress(c, min);
-      return { ...b, count: sc, pct: sc === null || n === 0 ? null : c / n };
-    });
-    const care = bands.filter((b) => CARE_LEVELS.includes(b.level)).reduce((s, b) => s + (counts.get(b.label) ?? 0), 0);
+    const ranges = bandRanges(id);
+    const raw = ranges.map((b) => counts.get(b.label) ?? 0);
+    const shown = hidden ? raw.map(() => null) : suppressGroup(raw, min);
+    const bands: BandSummary[] = ranges.map((b, i) => ({ ...b, count: shown[i], pct: shown[i] === null || n === 0 ? null : raw[i] / n }));
+    const care = ranges.reduce((s, b, i) => s + (CARE_LEVELS.includes(b.level) ? raw[i] : 0), 0);
+    // The care share would let a hidden band be recomputed, so it is withheld whenever any band is hidden.
+    const anyHidden = shown.some((v) => v === null);
     return {
       id, code: a.code, name: a.name, status: a.status, direction: a.direction,
       n: hidden ? null : n,
       bands,
-      careCount: hidden ? null : suppress(care, min),
-      careRate: hidden || n === 0 || suppress(care, min) === null ? null : care / n
+      careCount: anyHidden ? null : care,
+      careRate: anyHidden || n === 0 ? null : care / n
     };
   });
 
@@ -317,8 +332,9 @@ export function riskStats(r: Range, g: Granularity, assessmentId?: string) {
     levelCounts[row.level] = row.n;
   }
   const total = LEVELS.reduce((s, l) => s + levelCounts[l], 0);
-  const levels = LEVELS.map((l) => {
-    const c = suppress(levelCounts[l], min);
+  const levelShown = total > 0 && total < min ? LEVELS.map(() => null) : suppressGroup(LEVELS.map((l) => levelCounts[l]), min);
+  const levels = LEVELS.map((l, i) => {
+    const c = levelShown[i];
     return { level: l, count: c, pct: c === null || total === 0 ? null : levelCounts[l] / total };
   });
 
@@ -331,8 +347,9 @@ export function riskStats(r: Range, g: Granularity, assessmentId?: string) {
   const trendMap = new Map<string, Record<string, { n: number | null; careRate: number | null }>>();
   for (const row of trendRows) {
     const m = trendMap.get(row.k) ?? {};
-    const ok = row.n >= min;
-    m[row.id] = { n: ok ? row.n : null, careRate: ok ? row.care / row.n : null };
+    // Hide the period if it has too few results, or if the care group itself is a small cell.
+    const ok = row.n >= min && suppress(row.care, min) !== null;
+    m[row.id] = { n: row.n >= min ? row.n : null, careRate: ok ? row.care / row.n : null };
     trendMap.set(row.k, m);
   }
   const trend = periodsBetween(r, g).map((k) => ({ period: k, byAssessment: trendMap.get(k) ?? {} }));

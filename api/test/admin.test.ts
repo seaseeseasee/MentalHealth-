@@ -100,15 +100,18 @@ test('analytics end to end', async () => {
   assert.equal(o.assessments.enabled, 9);
   assert.ok(o.visits.today >= 8);
 
-  // Risk: PHQ-9 n=7 → visible; the single severe result is suppressed (<5), the 6 good results are shown.
+  // Risk: PHQ-9 n=7 → visible. The single severe result is a small cell (<5). Because n is shown, the 6 good
+  // results must be hidden too, otherwise 7 − 6 = 1 would reveal it (secondary suppression).
   const risk = (await admin.call('GET', '/admin/risk')).data;
   const phq = risk.perAssessment.find((x: any) => x.id === 'phq9');
   assert.equal(phq.n, 7);
   const good = phq.bands.find((b: any) => b.label === 'ไม่มีหรือมีน้อยมาก');
   const severe = phq.bands.find((b: any) => b.label === 'ระดับรุนแรง');
-  assert.equal(good.count, 6);
   assert.equal(severe.count, null);
+  assert.equal(good.count, null);
+  assert.equal(phq.careRate, null);
   assert.equal(risk.levels.find((l: any) => l.level === 'severe').count, null);
+  assert.equal(risk.levels.find((l: any) => l.level === 'good').count, null);
   // ST-5 has no completed results, so it is zero rather than hidden.
   assert.equal(risk.perAssessment.find((x: any) => x.id === 'st5').n, 0);
   // Admin responses never carry per-person fields.

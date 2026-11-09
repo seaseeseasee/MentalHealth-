@@ -6,7 +6,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
 process.env.DB_PATH = join(mkdtempSync(join(tmpdir(), 'mindease-tz-')), 'tz.db');
-const { parseRange, periodsBetween, thaiToday, userStats, overview, riskStats } = await import('../src/analytics.ts');
+const { parseRange, periodsBetween, thaiToday, userStats, overview, riskStats, suppressGroup } = await import('../src/analytics.ts');
 const { db } = await import('../src/db.ts');
 
 test('Thai day boundaries', () => {
@@ -48,4 +48,11 @@ test('an event at 01:00 Thai time counts on that Thai day, not the UTC day befor
   assert.equal(st5.n, 5);
   assert.equal(st5.bands[0].count, 5);
   assert.equal(st5.bands[0].pct, 1);
+});
+
+test('secondary suppression stops recovering a hidden cell from the total', () => {
+  assert.deepEqual(suppressGroup([20, 3, 9, 0], 5), [20, null, null, 0]);
+  assert.deepEqual(suppressGroup([20, 3, 2, 9], 5), [20, null, null, 9]);
+  assert.deepEqual(suppressGroup([20, 7, 9], 5), [20, 7, 9]);
+  assert.deepEqual(suppressGroup([0, 0, 4], 5), [0, 0, null]);
 });
