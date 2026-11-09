@@ -1,24 +1,45 @@
-import { useState, type FormEvent } from 'react';
+import { useState, type FormEvent, type ReactNode } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { api } from '../api.ts';
 import { useAuth } from '../auth.tsx';
-import { Avatar } from '../components/Avatar.tsx';
-import { BackButton } from '../components/ui.tsx';
+import { Icon } from '../components/Icon.tsx';
 
-function AuthHeader({ title, subtitle }: { title: string; subtitle: string }) {
+const POINTS = [
+  { icon: 'tests', bg: '#1E63C4', text: 'แบบประเมิน 9 ด้าน ใช้เวลาชุดละ 1–5 นาที' },
+  { icon: 'history', bg: '#7A58D6', text: 'บันทึกผลและดูแนวโน้มของตัวเองได้' },
+  { icon: 'shield', bg: '#2E9E62', text: 'ข้อมูลเป็นความลับ ลบได้ทุกเมื่อ' }
+];
+
+/** Split layout: illustration panel beside the form on desktop, a compact banner above it on mobile. */
+function AuthShell({ title, subtitle, children, footer }: { title: string; subtitle: string; children: ReactNode; footer: ReactNode }) {
   return (
-    <>
-      <div className="row" style={{ justifyContent: 'space-between' }}>
-        <BackButton to="/" />
-      </div>
-      <div className="row" style={{ alignItems: 'flex-end' }}>
-        <div className="grow">
-          <h1 className="h1">{title}</h1>
-          <p className="muted small" style={{ margin: '4px 0 0' }}>{subtitle}</p>
+    <div className="auth">
+      <aside className="auth-art">
+        <Link to="/" className="brand auth-brand">
+          <span className="brand-mark"><Icon name="sprout" size={22} /></span>
+          <span><span className="brand-name">MindEase</span><span className="brand-sub">ระบบประเมินสุขภาพจิตเบื้องต้น</span></span>
+        </Link>
+        <div className="auth-art-copy">
+          <p className="auth-art-title">ดูแลใจ…ให้แข็งแรง</p>
+          <p className="auth-art-sub">เริ่มได้จากการประเมินตัวเอง</p>
         </div>
-        <Avatar size={84} bg="var(--peach-50)" />
-      </div>
-    </>
+        <img src="/illustrations/hug.webp" alt="" width="382" height="495" className="auth-art-img" />
+        <ul className="auth-points">
+          {POINTS.map((p) => (
+            <li key={p.text}><span className="icon-circle" style={{ width: 34, height: 34, background: p.bg }}><Icon name={p.icon} size={17} /></span>{p.text}</li>
+          ))}
+        </ul>
+      </aside>
+      <main className="auth-main">
+        <div className="auth-card">
+          <Link to="/" className="auth-back"><Icon name="back" size={18} />กลับหน้าแรก</Link>
+          <h1 className="h1" style={{ fontSize: 26 }}>{title}</h1>
+          <p className="muted small" style={{ margin: '4px 0 20px' }}>{subtitle}</p>
+          {children}
+          <p className="small muted" style={{ textAlign: 'center', margin: '16px 0 0' }}>{footer}</p>
+        </div>
+      </main>
+    </div>
   );
 }
 
@@ -48,8 +69,11 @@ export function Login() {
   }
 
   return (
-    <main className="screen no-nav">
-      <AuthHeader title="ยินดีต้อนรับกลับมา" subtitle="เข้าสู่ระบบเพื่อดูผลและแนวโน้มของคุณ" />
+    <AuthShell
+      title="ยินดีต้อนรับกลับมา"
+      subtitle="เข้าสู่ระบบเพื่อดูผลและแนวโน้มของคุณ"
+      footer={<>ยังไม่มีบัญชี? <Link to="/register" style={{ fontWeight: 600 }}>สมัครใช้งาน</Link></>}
+    >
       <form onSubmit={submit} className="stack" style={{ gap: 14 }}>
         <label className="field">อีเมล
           <input type="email" autoComplete="email" required value={email} onChange={(e) => setEmail(e.target.value)} />
@@ -60,10 +84,7 @@ export function Login() {
         {error && <div className="alert alert-error" role="alert">{error}</div>}
         <button className="btn btn-primary btn-lg btn-block" disabled={busy}>{busy ? 'กำลังเข้าสู่ระบบ…' : 'เข้าสู่ระบบ'}</button>
       </form>
-      <p className="small muted" style={{ textAlign: 'center', margin: 0 }}>
-        ยังไม่มีบัญชี? <Link to="/register" style={{ fontWeight: 600 }}>สมัครใช้งาน</Link>
-      </p>
-    </main>
+    </AuthShell>
   );
 }
 
@@ -93,8 +114,11 @@ export function Register() {
   }
 
   return (
-    <main className="screen no-nav">
-      <AuthHeader title="เริ่มต้นดูแลใจ" subtitle="สร้างบัญชีเพื่อบันทึกผลและติดตามแนวโน้ม" />
+    <AuthShell
+      title="เริ่มต้นดูแลใจ"
+      subtitle="สร้างบัญชีเพื่อบันทึกผลและติดตามแนวโน้ม"
+      footer={<>มีบัญชีอยู่แล้ว? <Link to="/login" style={{ fontWeight: 600 }}>เข้าสู่ระบบ</Link></>}
+    >
       <form onSubmit={submit} className="stack" style={{ gap: 14 }}>
         <label className="field">ชื่อที่ให้เราเรียก
           <input autoComplete="nickname" required maxLength={40} value={displayName} onChange={(e) => setDisplayName(e.target.value)} placeholder="เช่น มายด์" />
@@ -105,8 +129,8 @@ export function Register() {
         <label className="field">รหัสผ่าน (อย่างน้อย 8 ตัวอักษร)
           <input type="password" autoComplete="new-password" required minLength={8} value={password} onChange={(e) => setPassword(e.target.value)} />
         </label>
-        <div className="card tint-butter" style={{ boxShadow: 'none', fontSize: 14, lineHeight: 1.6, color: '#5C4510' }}>
-          <strong style={{ fontFamily: 'var(--font-head)', fontWeight: 500 }}>ความเป็นส่วนตัวของคุณ (PDPA)</strong>
+        <div className="auth-consent">
+          <strong className="row" style={{ gap: 8, fontFamily: 'var(--font-head)', fontWeight: 500, color: 'var(--heading)' }}><Icon name="lock" size={18} />ความเป็นส่วนตัวของคุณ (PDPA)</strong>
           <p style={{ margin: '4px 0 10px' }}>
             เราเก็บคำตอบ ผลการประเมิน และบันทึกอารมณ์ของคุณ เพื่อแสดงผลและแนวโน้มให้คุณ
             ผู้ดูแลระบบเห็นเฉพาะสถิติภาพรวมที่ไม่ระบุตัวบุคคล (เช่น จำนวนผู้ทำแบบประเมินในแต่ละระดับ) เพื่อปรับปรุงบริการ
@@ -120,9 +144,6 @@ export function Register() {
         {error && <div className="alert alert-error" role="alert">{error}</div>}
         <button className="btn btn-primary btn-lg btn-block" disabled={busy || !consent}>{busy ? 'กำลังสร้างบัญชี…' : 'สร้างบัญชี'}</button>
       </form>
-      <p className="small muted" style={{ textAlign: 'center', margin: 0 }}>
-        มีบัญชีอยู่แล้ว? <Link to="/login" style={{ fontWeight: 600 }}>เข้าสู่ระบบ</Link>
-      </p>
-    </main>
+    </AuthShell>
   );
 }

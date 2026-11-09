@@ -1,6 +1,4 @@
 import { useEffect, useState } from 'react';
-import { useAuth } from '../auth.tsx';
-import { Avatar } from '../components/Avatar.tsx';
 import { Icon } from '../components/Icon.tsx';
 import { HelpLineCard } from '../components/ui.tsx';
 
@@ -14,29 +12,30 @@ const PHASES = [
 const CYCLES = 4;
 
 const ACTIVITIES: { cat: Cat; title: string; meta: string; icon: string; tint: string; steps: string[] }[] = [
-  { cat: 'breath', title: 'หายใจแบบกล่อง', meta: 'หายใจ · 2 นาที', icon: 'wind', tint: 'tint-peach ink-peach', steps: ['หายใจเข้าช้าๆ นับ 1–4', 'กลั้นไว้ นับ 1–4', 'ผ่อนออกช้าๆ นับ 1–4', 'ค้างไว้ นับ 1–4 แล้วทำซ้ำ 6 รอบ'] },
-  { cat: 'mind', title: 'สแกนร่างกาย', meta: 'สมาธิ · 5 นาที', icon: 'body', tint: 'tint-mint ink-mint', steps: ['นั่งหรือนอนในท่าสบาย หลับตา', 'ค่อยๆ เลื่อนความสนใจจากปลายเท้าขึ้นมาถึงศีรษะ', 'สังเกตจุดที่ตึง แล้วหายใจออกพร้อมผ่อนคลายจุดนั้น', 'ไม่ต้องเปลี่ยนอะไร แค่รับรู้'] },
-  { cat: 'mind', title: 'เขียนขอบคุณ 3 สิ่ง', meta: 'สมาธิ · 3 นาที', icon: 'pen', tint: 'tint-butter ink-butter', steps: ['นึกถึงเรื่องดีๆ เล็กๆ ที่เกิดขึ้นวันนี้ 3 เรื่อง', 'เขียนว่าเพราะอะไรเรื่องนั้นถึงดี', 'ทำต่อเนื่อง 1 สัปดาห์แล้วสังเกตความรู้สึก'] },
-  { cat: 'sleep', title: 'เตรียมตัวก่อนนอน', meta: 'การนอน · 10 นาที', icon: 'moon', tint: 'tint-lav ink-lav', steps: ['ปิดหน้าจอก่อนนอน 30 นาที', 'หรี่ไฟและทำห้องให้เย็นสบาย', 'จดเรื่องที่ค้างในใจลงกระดาษ แล้ววางไว้ก่อน', 'หายใจ 4-7-8 สัก 4 รอบ'] },
-  { cat: 'sleep', title: 'ยืดเหยียดคลายเครียด', meta: 'การนอน · 7 นาที', icon: 'walk', tint: 'tint-mint ink-mint', steps: ['หมุนไหล่ไปข้างหลังช้าๆ 10 รอบ', 'เอียงคอซ้าย–ขวา ข้างละ 15 วินาที', 'ก้มแตะปลายเท้าเท่าที่ไหว ค้างไว้ 20 วินาที', 'หายใจยาวๆ ทุกท่า'] }
+  { cat: 'breath', title: 'หายใจแบบกล่อง', meta: 'หายใจ · 2 นาที', icon: 'wind', tint: '#E26A1B', steps: ['หายใจเข้าช้าๆ นับ 1–4', 'กลั้นไว้ นับ 1–4', 'ผ่อนออกช้าๆ นับ 1–4', 'ค้างไว้ นับ 1–4 แล้วทำซ้ำ 6 รอบ'] },
+  { cat: 'mind', title: 'สแกนร่างกาย', meta: 'สมาธิ · 5 นาที', icon: 'body', tint: '#2E9E62', steps: ['นั่งหรือนอนในท่าสบาย หลับตา', 'ค่อยๆ เลื่อนความสนใจจากปลายเท้าขึ้นมาถึงศีรษะ', 'สังเกตจุดที่ตึง แล้วหายใจออกพร้อมผ่อนคลายจุดนั้น', 'ไม่ต้องเปลี่ยนอะไร แค่รับรู้'] },
+  { cat: 'mind', title: 'เขียนขอบคุณ 3 สิ่ง', meta: 'สมาธิ · 3 นาที', icon: 'pen', tint: '#B98600', steps: ['นึกถึงเรื่องดีๆ เล็กๆ ที่เกิดขึ้นวันนี้ 3 เรื่อง', 'เขียนว่าเพราะอะไรเรื่องนั้นถึงดี', 'ทำต่อเนื่อง 1 สัปดาห์แล้วสังเกตความรู้สึก'] },
+  { cat: 'sleep', title: 'เตรียมตัวก่อนนอน', meta: 'การนอน · 10 นาที', icon: 'moon', tint: '#7A58D6', steps: ['ปิดหน้าจอก่อนนอน 30 นาที', 'หรี่ไฟและทำห้องให้เย็นสบาย', 'จดเรื่องที่ค้างในใจลงกระดาษ แล้ววางไว้ก่อน', 'หายใจ 4-7-8 สัก 4 รอบ'] },
+  { cat: 'sleep', title: 'ยืดเหยียดคลายเครียด', meta: 'การนอน · 7 นาที', icon: 'walk', tint: '#2E9E62', steps: ['หมุนไหล่ไปข้างหลังช้าๆ 10 รอบ', 'เอียงคอซ้าย–ขวา ข้างละ 15 วินาที', 'ก้มแตะปลายเท้าเท่าที่ไหว ค้างไว้ 20 วินาที', 'หายใจยาวๆ ทุกท่า'] }
 ];
 
 const ARTICLES = [
-  { title: 'รู้จักภาวะหมดไฟ และวิธีเติมพลังให้ตัวเอง', mins: 4, icon: 'battery', tint: 'tint-peach ink-peach',
+  { title: 'รู้จักภาวะหมดไฟ และวิธีเติมพลังให้ตัวเอง', mins: 4, icon: 'battery', tint: '#E26A1B',
     body: ['ภาวะหมดไฟ (Burnout) เกิดจากความเครียดจากงานที่สะสมเป็นเวลานาน มักมีอาการ 3 อย่าง คือ เหนื่อยล้าทางอารมณ์ รู้สึกเฉยชาหรือห่างเหินกับงาน และรู้สึกว่าตัวเองทำงานได้ไม่ดีเหมือนเคย',
       'การเติมพลังเริ่มได้จากการแยกเวลางานกับเวลาส่วนตัวให้ชัด พักสั้นๆ ระหว่างวัน คุยกับหัวหน้าเรื่องภาระงานที่มากเกินไป และหาสิ่งที่ทำให้รู้สึกมีความหมายนอกเหนือจากงาน',
       'หากรู้สึกหมดแรงจนกระทบการนอน การกิน หรือความสัมพันธ์ ควรปรึกษาผู้เชี่ยวชาญ'] },
-  { title: 'นอนไม่หลับเพราะคิดมาก ทำอย่างไรดี', mins: 5, icon: 'moon', tint: 'tint-lav ink-lav',
+  { title: 'นอนไม่หลับเพราะคิดมาก ทำอย่างไรดี', mins: 5, icon: 'moon', tint: '#7A58D6',
     body: ['ความคิดที่วนเวียนตอนกลางคืนเป็นเรื่องที่พบได้บ่อย โดยเฉพาะช่วงที่มีความเครียด',
       'ลองกำหนด “เวลากังวล” 15 นาทีช่วงหัวค่ำ เขียนเรื่องที่กังวลและสิ่งที่จะทำต่อไว้บนกระดาษ เมื่อเข้านอนแล้วคิดขึ้นมาอีก ให้บอกตัวเองว่าได้จดไว้แล้ว',
       'ถ้านอนไม่หลับเกิน 20 นาที ให้ลุกไปทำกิจกรรมเบาๆ ในแสงสลัว แล้วค่อยกลับมานอนเมื่อง่วง ตื่นเวลาเดิมทุกวันแม้จะนอนน้อย'] },
-  { title: 'วิธีรับฟังเพื่อนที่กำลังไม่สบายใจ', mins: 3, icon: 'chat', tint: 'tint-mint ink-mint',
+  { title: 'วิธีรับฟังเพื่อนที่กำลังไม่สบายใจ', mins: 3, icon: 'chat', tint: '#2E9E62',
     body: ['ฟังโดยไม่รีบแนะนำหรือตัดสิน ให้เขาได้เล่าจนจบ สะท้อนความรู้สึกที่ได้ยิน เช่น “ฟังดูเหนื่อยมากเลยนะ”',
       'ถามว่าเขาอยากให้ช่วยอะไร มากกว่าเดาเอง และถ้าเขาพูดถึงการทำร้ายตัวเอง ให้ถามตรงๆ อย่างอ่อนโยน และพาไปหาความช่วยเหลือ เช่น สายด่วน 1323'] }
 ];
 
+const CAT_LABEL: Record<Cat, string> = { breath: 'หายใจ', mind: 'สมาธิ', sleep: 'การนอน' };
+
 function BreathingCard() {
-  const { user } = useAuth();
   const [running, setRunning] = useState(false);
   // step indexes across all phases of all cycles; left is the countdown for that phase.
   const [{ step, left }, setTimer] = useState({ step: 0, left: PHASES[0].secs });
@@ -71,21 +70,28 @@ function BreathingCard() {
 
   const scale = running ? phase.scale : 0.72;
   return (
-    <section className="card tint-lav row" style={{ boxShadow: 'none', borderRadius: 28, padding: 18, alignItems: 'center' }}>
-      <div className="grow">
-        <span className="chip ink-lav" style={{ background: '#fff', fontSize: 12 }}>แนะนำสำหรับคุณ</span>
-        <h2 style={{ fontSize: 20, margin: '10px 0 2px' }}>ฝึกหายใจ 4-7-8</h2>
-        <p className="small" style={{ color: '#4F4470', margin: '0 0 12px', lineHeight: 1.5 }} aria-live="polite">
-          {running ? `รอบ ${cycle}/${CYCLES} · ${phase.label} ${left} วินาที` : 'ช่วยให้ใจสงบลงก่อนนอน · ประมาณ 1 นาที'}
+    <section className="breath-card">
+      <div className="grow" style={{ minWidth: 0 }}>
+        <span className="chip" style={{ background: '#fff', color: 'var(--lav-600)', fontSize: 12 }}>แนะนำสำหรับคุณ</span>
+        <h2 style={{ fontSize: 24, margin: '10px 0 4px' }}>ฝึกหายใจ 4-7-8</h2>
+        <p className="small" style={{ color: 'var(--heading)', margin: '0 0 14px', lineHeight: 1.55 }} aria-live="polite">
+          {running ? `รอบ ${cycle}/${CYCLES} · ${phase.label} ${left} วินาที` : 'ช่วยให้ใจสงบลง เหมาะก่อนนอน · ประมาณ 1 นาที'}
         </p>
-        <button type="button" className="btn btn-primary" style={{ minHeight: 44, fontSize: 15 }} aria-pressed={running} onClick={toggle}>
+        {running && (
+          <div className="breath-steps" aria-hidden="true">
+            {PHASES.map((p, i) => (
+              <span key={p.label} className={i === step % PHASES.length ? 'on' : undefined}>{p.label} {p.secs}s</span>
+            ))}
+          </div>
+        )}
+        <button type="button" className="btn btn-primary" style={{ minHeight: 46, fontSize: 15 }} aria-pressed={running} onClick={toggle}>
           <Icon name={running ? 'pause' : 'play'} size={18} />{running ? 'หยุด' : 'เริ่มเลย'}
         </button>
       </div>
-      <div style={{ position: 'relative', width: 130, height: 130, flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <div style={{ position: 'absolute', inset: 0, borderRadius: '50%', border: '2px dashed var(--lav-200)' }} />
-        <div aria-hidden="true" style={{ position: 'absolute', inset: 6, borderRadius: '50%', background: 'var(--lav-200)', opacity: 0.7, transform: `scale(${scale})`, transition: `transform ${running ? phase.secs : 0.4}s ease-in-out` }} />
-        <div style={{ position: 'relative' }}><Avatar config={user?.avatar} mood="calm" size={78} bg="#fff" /></div>
+      <div className="breath-ring-wrap">
+        <div className="breath-ring-dash" />
+        <div aria-hidden="true" className="breath-ring-fill" style={{ transform: `scale(${scale})`, transition: `transform ${running ? phase.secs : 0.4}s ease-in-out` }} />
+        <img src="/illustrations/hug.webp" alt="" width="120" height="155" className="breath-ring-img" />
       </div>
     </section>
   );
@@ -98,52 +104,58 @@ export function SelfCare() {
   ];
 
   return (
-    <main className="screen">
+    <main className="screen wide care">
       <header>
         <h1 className="h1">ดูแลใจวันนี้</h1>
-        <p className="small muted" style={{ margin: '2px 0 0' }}>กิจกรรมสั้นๆ ที่ทำได้ทุกที่</p>
+        <p className="small muted" style={{ margin: '2px 0 0' }}>กิจกรรมสั้นๆ ที่ทำได้ทุกที่ และบทความที่ช่วยให้เข้าใจใจตัวเองมากขึ้น</p>
       </header>
 
       <BreathingCard />
 
-      <div className="filter-row" role="group" aria-label="หมวดกิจกรรม">
-        {filters.map((f) => (
-          <button key={f.id} type="button" className="filter" aria-pressed={cat === f.id} onClick={() => setCat(f.id)}>{f.label}</button>
-        ))}
-      </div>
-
-      <div className="stack" style={{ gap: 10 }}>
-        {ACTIVITIES.filter((a) => cat === 'all' || a.cat === cat).map((a) => (
-          <details key={a.title} className="card" style={{ padding: '12px 14px', boxShadow: 'none' }}>
-            <summary className="row" style={{ cursor: 'pointer', listStyle: 'none' }}>
-              <span className={`icon-tile ${a.tint}`}><Icon name={a.icon} /></span>
-              <span className="grow">
-                <span style={{ display: 'block', fontFamily: 'var(--font-head)', fontSize: 15 }}>{a.title}</span>
-                <span className="caption muted">{a.meta}</span>
-              </span>
-              <Icon name="next" size={18} />
-            </summary>
-            <ol style={{ margin: '10px 0 0', paddingLeft: 22, fontSize: 14, lineHeight: 1.7 }}>
-              {a.steps.map((s) => <li key={s}>{s}</li>)}
-            </ol>
-          </details>
-        ))}
-      </div>
+      <section>
+        <div className="section-head" style={{ marginBottom: 12 }}>
+          <h2 className="h2" style={{ fontSize: 18, marginRight: 'auto' }}>กิจกรรมดูแลใจ</h2>
+          <div className="seg" role="group" aria-label="หมวดกิจกรรม">
+            {filters.map((f) => (
+              <button key={f.id} type="button" aria-pressed={cat === f.id} onClick={() => setCat(f.id)}>{f.label}</button>
+            ))}
+          </div>
+        </div>
+        <div className="care-grid">
+          {ACTIVITIES.filter((a) => cat === 'all' || a.cat === cat).map((a) => (
+            <details key={a.title} className="care-item">
+              <summary>
+                <span className="icon-circle" style={{ background: a.tint }}><Icon name={a.icon} size={22} /></span>
+                <span className="grow">
+                  <span className="care-title">{a.title}</span>
+                  <span className="caption muted">{a.meta}</span>
+                </span>
+                <span className="chip" style={{ background: 'var(--lav-50)', color: 'var(--lav-600)', fontSize: 12 }}>{CAT_LABEL[a.cat]}</span>
+                <span className="care-chevron"><Icon name="next" size={18} /></span>
+              </summary>
+              <ol>
+                {a.steps.map((s) => <li key={s}>{s}</li>)}
+              </ol>
+            </details>
+          ))}
+        </div>
+      </section>
 
       <section>
-        <h2 className="h2" style={{ fontSize: 16, marginBottom: 8 }}>บทความน่าอ่าน</h2>
-        <div className="stack">
+        <h2 className="h2" style={{ fontSize: 18, marginBottom: 12 }}>บทความน่าอ่าน</h2>
+        <div className="care-grid">
           {ARTICLES.map((ar) => (
-            <details key={ar.title} className="card" style={{ padding: 10, boxShadow: 'none' }}>
-              <summary className="row" style={{ cursor: 'pointer', listStyle: 'none' }}>
-                <span className={`icon-tile ${ar.tint}`} style={{ width: 56, height: 56 }}><Icon name={ar.icon} size={30} strokeWidth={1.8} /></span>
+            <details key={ar.title} className="care-item">
+              <summary>
+                <span className="icon-circle" style={{ width: 52, height: 52, borderRadius: 16, background: ar.tint }}><Icon name={ar.icon} size={26} /></span>
                 <span className="grow">
-                  <span style={{ display: 'block', fontSize: 15, fontWeight: 500, lineHeight: 1.45 }}>{ar.title}</span>
-                  <span className="caption muted">อ่าน {ar.mins} นาที</span>
+                  <span className="care-title">{ar.title}</span>
+                  <span className="caption muted"><Icon name="book" size={13} /> อ่าน {ar.mins} นาที</span>
                 </span>
+                <span className="care-chevron"><Icon name="next" size={18} /></span>
               </summary>
-              <div style={{ padding: '8px 6px 4px', fontSize: 15, lineHeight: 1.7 }}>
-                {ar.body.map((p) => <p key={p} style={{ margin: '0 0 10px' }}>{p}</p>)}
+              <div className="care-body">
+                {ar.body.map((p) => <p key={p}>{p}</p>)}
               </div>
             </details>
           ))}
