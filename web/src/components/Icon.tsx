@@ -38,7 +38,18 @@ const PATHS: Record<string, string> = {
   download: 'M12 4v11M7 10l5 5 5-5M5 20h14',
   trash: 'M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13',
   logout: 'M15 4h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-3M10 16l-4-4 4-4M6 12h10',
-  book: 'M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2zM4 21V5'
+  book: 'M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2zM4 21V5',
+  bulb: 'M9 18h6M10 21h4M12 3a6 6 0 0 1 4 10.5c-.8.8-1 1.5-1 2.5H9c0-1-.2-1.7-1-2.5A6 6 0 0 1 12 3z',
+  search: 'M11 4a7 7 0 1 1 0 14a7 7 0 1 1 0-14zM20 20l-4-4',
+  filter: 'M4 6h16M7 12h10M10 18h4',
+  printer: 'M7 9V3h10v6M7 17H5a2 2 0 0 1-2-2v-4a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-2M7 14h10v7H7z',
+  chart: 'M4 20V4M4 20h16M8 16v-4M12 16V8M16 16v-6',
+  users: 'M9 4a4 4 0 1 1 0 8a4 4 0 1 1 0-8zM2 21c1-4 4-6 7-6s6 2 7 6M17 4.5a3.5 3.5 0 0 1 0 7M19 15c2 .8 3 2.8 3.5 5',
+  settings: 'M12 9a3 3 0 1 1 0 6a3 3 0 1 1 0-6zM12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M5 19l2-2M17 7l2-2',
+  file: 'M6 3h9l5 5v13H6zM14 3v6h6M9 13h8M9 17h6',
+  calendar: 'M4 6h16v15H4zM4 10h16M8 3v4M16 3v4',
+  menu: 'M4 6h16M4 12h16M4 18h16',
+  external: 'M14 4h6v6M20 4l-9 9M18 14v6H4V6h6'
 };
 
 const FILLED = new Set(['play', 'pause']);

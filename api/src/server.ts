@@ -4,7 +4,9 @@ import { db } from './db.ts';
 import {
   SESSION_COOKIE, hashPassword, verifyPassword, createSession, destroySession, userIdForToken, tooManyAttempts
 } from './auth.ts';
-import { getAssessment, validateAnswers, scoreAssessment } from '../../shared/assessments.ts';
+import { getAssessment, validateAnswers, scoreAssessment, ASSESSMENTS } from '../../shared/assessments.ts';
+import { adminRouter, bootstrapAdmins } from './admin.ts';
+import { isAssessmentEnabled, recordVisit } from './analytics.ts';
 
 const app = express();
 app.disable('x-powered-by');
@@ -28,7 +30,7 @@ const DEFAULT_AVATAR = { skin: '#F5C9A6', hair: 'bob', hairColor: '#4A3228', out
 
 type UserRow = {
   id: number; email: string; display_name: string; sex: string | null; avatar: string;
-  notify_mood: number; consent_at: string; created_at: string;
+  notify_mood: number; consent_at: string; created_at: string; role: string;
 };
 type ResultRow = {
   id: number; assessment_id: string; answers: string; sex: string | null; score: number; max_score: number;
@@ -47,7 +49,8 @@ function publicUser(u: UserRow) {
     avatar: JSON.parse(u.avatar),
     notifyMood: u.notify_mood === 1,
     consentAt: toIso(u.consent_at),
-    createdAt: toIso(u.created_at)
+    createdAt: toIso(u.created_at),
+    role: u.role ?? 'user'
   };
 }
 
@@ -117,6 +120,8 @@ app.post('/api/auth/register', (req, res) => {
     `INSERT INTO users (email, password_hash, display_name, avatar, consent_at) VALUES (?, ?, ?, ?, datetime('now'))`
   ).run(cleanEmail, hashPassword(password), name, JSON.stringify(DEFAULT_AVATAR));
   const userId = Number(info.lastInsertRowid);
+  bootstrapAdmins();
+  recordVisit(userId, req.get('user-agent'), 'login');
   setSessionCookie(res, userId);
   res.status(201).json({ user: publicUser(getUser(userId)!) });
 });
@@ -130,7 +135,8 @@ app.post('/api/auth/login', (req, res) => {
     return res.status(401).json({ error: 'อีเมลหรือรหัสผ่านไม่ถูกต้อง' });
   }
   setSessionCookie(res, row.id);
-  res.json({ user: publicUser(row) });
+  recordVisit(row.id, req.get('user-agent'), 'login');
+  res.json({ user: publicUser(getUser(row.id)!) });
 });
 
 app.post('/api/auth/logout', (req, res) => {
@@ -143,6 +149,7 @@ app.post('/api/auth/logout', (req, res) => {
 app.get('/api/auth/me', requireUser, (req: any, res) => {
   const user = getUser(req.userId);
   if (!user) return res.status(401).json({ error: 'กรุณาเข้าสู่ระบบ' });
+  recordVisit(user.id, req.get('user-agent'), 'visit');
   res.json({ user: publicUser(user) });
 });
 
@@ -178,6 +185,7 @@ app.post('/api/results', requireUser, (req: any, res) => {
   const { assessmentId, answers, sex } = req.body ?? {};
   const assessment = typeof assessmentId === 'string' ? getAssessment(assessmentId) : undefined;
   if (!assessment) return res.status(404).json({ error: 'ไม่พบแบบประเมิน' });
+  if (!isAssessmentEnabled(assessment.id)) return res.status(403).json({ error: 'แบบประเมินนี้ปิดให้บริการชั่วคราว' });
   const error = validateAnswers(assessment, answers, sex);
   if (error) return res.status(400).json({ error });
   const usedSex = assessment.askSex ? sex : null;
@@ -188,7 +196,19 @@ app.post('/api/results', requireUser, (req: any, res) => {
   ).run(req.userId, assessment.id, JSON.stringify(answers), usedSex, r.score, r.max, r.band.level, r.band.label,
     r.crisis ? 1 : 0, JSON.stringify(r.domains));
   if (usedSex) db.prepare('UPDATE users SET sex = ? WHERE id = ? AND sex IS NULL').run(usedSex, req.userId);
-  const row = db.prepare('SELECT * FROM results WHERE id = ?').get(Number(info.lastInsertRowid)) as ResultRow;
+  const resultId = Number(info.lastInsertRowid);
+  // Close the matching attempt. Clients that never opened one (older app versions) get a started+completed row,
+  // so "completed" can never exceed "started" in the analytics.
+  const attemptId = Number(req.body?.attemptId);
+  const closed = Number.isInteger(attemptId) && attemptId > 0
+    ? db.prepare(`UPDATE assessment_attempts SET completed_at = datetime('now'), result_id = ?
+        WHERE id = ? AND user_id = ? AND assessment_id = ? AND completed_at IS NULL`).run(resultId, attemptId, req.userId, assessment.id).changes
+    : 0;
+  if (!closed) {
+    db.prepare(`INSERT INTO assessment_attempts (user_id, assessment_id, completed_at, result_id) VALUES (?, ?, datetime('now'), ?)`)
+      .run(req.userId, assessment.id, resultId);
+  }
+  const row = db.prepare('SELECT * FROM results WHERE id = ?').get(resultId) as ResultRow;
   res.status(201).json({ result: publicResult(row) });
 });
 
@@ -210,6 +230,25 @@ app.delete('/api/results/:id', requireUser, (req: any, res) => {
   db.prepare('DELETE FROM results WHERE id = ? AND user_id = ?').run(Number(req.params.id), req.userId);
   res.json({ ok: true });
 });
+
+// ---- Attempts (start of a questionnaire; no answers are sent) ----
+app.post('/api/attempts', requireUser, (req: any, res) => {
+  const a = typeof req.body?.assessmentId === 'string' ? getAssessment(req.body.assessmentId) : undefined;
+  if (!a) return res.status(404).json({ error: 'ไม่พบแบบประเมิน' });
+  if (!isAssessmentEnabled(a.id)) return res.status(403).json({ error: 'แบบประเมินนี้ปิดให้บริการชั่วคราว' });
+  // Re-opening the same questionnaire within 24 hours continues the same attempt instead of counting a new one.
+  const open = db.prepare(`SELECT id FROM assessment_attempts WHERE user_id = ? AND assessment_id = ? AND completed_at IS NULL
+      AND started_at >= datetime('now', '-24 hours') ORDER BY started_at DESC LIMIT 1`).get(req.userId, a.id) as { id: number } | undefined;
+  const id = open ? open.id : Number(db.prepare('INSERT INTO assessment_attempts (user_id, assessment_id) VALUES (?, ?)').run(req.userId, a.id).lastInsertRowid);
+  res.status(open ? 200 : 201).json({ attemptId: id });
+});
+
+app.get('/api/assessments/availability', requireUser, (_req, res) => {
+  res.json({ disabled: ASSESSMENTS.filter((a) => !isAssessmentEnabled(a.id)).map((a) => a.id) });
+});
+
+// ---- Admin (aggregate analytics; staff roles only) ----
+app.use('/api/admin', adminRouter);
 
 // ---- Mood & stats ----
 app.put('/api/moods/today', requireUser, (req: any, res) => {
@@ -255,6 +294,8 @@ app.use((err: any, _req: any, res: any, _next: any) => {
   console.error(err);
   res.status(err?.status ?? 500).json({ error: 'เกิดข้อผิดพลาด กรุณาลองใหม่' });
 });
+
+bootstrapAdmins();
 
 const port = Number(process.env.PORT ?? 3000);
 app.listen(port, () => console.log(`MindEase API listening on :${port}`));

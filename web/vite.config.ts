@@ -6,6 +6,6 @@ export default defineConfig({
   server: {
     port: 5180,
     fs: { allow: ['..'] },
-    proxy: { '/api': 'http://localhost:3000' }
+    proxy: { '/api': process.env.API_URL ?? 'http://localhost:3000' }
   }
 });

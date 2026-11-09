@@ -2,6 +2,27 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import type { Band, Level } from '../../../shared/assessments.ts';
 import { Icon } from './Icon.tsx';
 
+/** Solid colour + pale tint per assessment (icon circles and tiles), matching the approved mockup. */
+export const ACCENTS: Record<string, { c: string; tint: string }> = {
+  thi15: { c: '#2E9E62', tint: '#E9F7EF' },
+  st5: { c: '#E26A1B', tint: '#FFF1E5' },
+  phq9: { c: '#7A58D6', tint: '#F1ECFE' },
+  eq: { c: '#D04F7B', tint: '#FDEDF2' },
+  rq: { c: '#22915A', tint: '#E9F7EF' },
+  auditc: { c: '#B98600', tint: '#FFF7DE' },
+  digital: { c: '#16908C', tint: '#E6F7F7' },
+  memory: { c: '#2F6FD0', tint: '#EAF2FF' },
+  burnout: { c: '#D9622A', tint: '#FFF1E5' }
+};
+
+export function AssessmentIcon({ id, icon, size = 46 }: { id: string; icon: string; size?: number }) {
+  return (
+    <span className="icon-circle" style={{ width: size, height: size, background: ACCENTS[id]?.c ?? 'var(--lav-600)' }}>
+      <Icon name={icon} size={Math.round(size * 0.48)} />
+    </span>
+  );
+}
+
 export const TINTS: Record<string, { tint: string; ink: string }> = {
   thi15: { tint: 'tint-butter', ink: 'ink-butter' },
   st5: { tint: 'tint-peach', ink: 'ink-peach' },
@@ -15,17 +36,32 @@ export const TINTS: Record<string, { tint: string; ink: string }> = {
 };
 
 export const LEVEL_COLORS: Record<Level, string> = {
-  good: '#2F7458',
-  mild: '#C99A2E',
-  moderate: '#E9825F',
-  severe: '#C2546A'
+  good: '#2E9E62',
+  mild: '#D9A21B',
+  moderate: '#E97A2E',
+  severe: '#C0395E'
+};
+
+/** Saturated fills for the band scale bar and charts (each step also differs in lightness). */
+export const LEVEL_FILLS: Record<Level, string> = {
+  good: '#2E9E62',
+  mild: '#CFA00C',
+  moderate: '#DD5F26',
+  severe: '#A8244E'
+};
+
+export const LEVEL_NAMES: Record<Level, string> = {
+  good: 'ปกติ/ดี',
+  mild: 'ควรเฝ้าระวัง',
+  moderate: 'ควรดูแล',
+  severe: 'เสี่ยงสูง'
 };
 
 const BAND_FILLS: Record<Level, string> = {
-  good: '#BFE8D6',
+  good: '#BFE6CF',
   mild: '#FFE9A8',
-  moderate: '#F7B796',
-  severe: '#F3A3AF'
+  moderate: '#F9C4A0',
+  severe: '#F3A3B5'
 };
 
 export function Loading({ label = 'กำลังโหลด…' }: { label?: string }) {
@@ -104,7 +140,7 @@ export function ScoreGauge({ score, max, level, size = 136 }: { score: number; m
   return (
     <div style={{ position: 'relative', width: size, height: size, flexShrink: 0 }}>
       <svg width={size} height={size} viewBox="0 0 140 140" role="img" aria-label={`คะแนน ${score} จาก ${max}`}>
-        <circle cx="70" cy="70" r={r} fill="none" stroke="#F3EAE0" strokeWidth="14" />
+        <circle cx="70" cy="70" r={r} fill="none" stroke="#E3ECF8" strokeWidth="14" />
         <circle cx="70" cy="70" r={r} fill="none" stroke={LEVEL_COLORS[level]} strokeWidth="14" strokeLinecap="round"
           strokeDasharray={`${dash} ${c}`} transform="rotate(-90 70 70)" />
       </svg>
@@ -127,7 +163,7 @@ export function BandScale({ bands, current }: { bands: Band[]; current: Band }) 
               height: 8,
               background: BAND_FILLS[b.level],
               borderRadius: i === 0 ? '999px 0 0 999px' : i === bands.length - 1 ? '0 999px 999px 0' : 0,
-              outline: active ? '2px solid #3A2E2A' : undefined,
+              outline: active ? '2px solid #0F3E8A' : undefined,
               outlineOffset: 1
             }} />
             <div style={{ fontSize: 12, textAlign: 'center', marginTop: 4, fontWeight: active ? 600 : 400 }} className={active ? undefined : 'muted'}>
@@ -154,17 +190,17 @@ export function TrendChart({ points, max, bands, ariaLabel }: { points: TrendPoi
         <rect key={i} x={left - 6} width={right - left + 16} y={yOf(b.max + (i === bands.length - 1 ? 0 : 1))}
           height={yOf(b.min) - yOf(b.max + (i === bands.length - 1 ? 0 : 1))} fill={BAND_FILLS[b.level]} opacity="0.45" />
       ))}
-      <text x="26" y="155" textAnchor="end" fontSize="12" fill="#75675F">0</text>
-      <text x="26" y="20" textAnchor="end" fontSize="12" fill="#75675F">{max}</text>
+      <text x="26" y="155" textAnchor="end" fontSize="12" fill="#52637A">0</text>
+      <text x="26" y="20" textAnchor="end" fontSize="12" fill="#52637A">{max}</text>
       {coords.length > 1 && (
-        <path d={'M' + coords.map((c) => `${c[0]} ${c[1]}`).join('L')} fill="none" stroke="#6B54C4" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+        <path d={'M' + coords.map((c) => `${c[0]} ${c[1]}`).join('L')} fill="none" stroke="#1E63C4" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
       )}
       {coords.map((c, i) => (
-        <circle key={i} cx={c[0]} cy={c[1]} r="4.5" fill="#fff" stroke="#6B54C4" strokeWidth="3" />
+        <circle key={i} cx={c[0]} cy={c[1]} r="4.5" fill="#fff" stroke="#1E63C4" strokeWidth="3" />
       ))}
-      {last && <text x={last[0]} y={last[1] - 12} textAnchor="middle" fontSize="13" fontWeight="600" fill="#3A2E2A">{points[points.length - 1].value}</text>}
+      {last && <text x={last[0]} y={last[1] - 12} textAnchor="middle" fontSize="13" fontWeight="600" fill="#1B2B45">{points[points.length - 1].value}</text>}
       {points.map((p, i) => (
-        <text key={i} x={xOf(i)} y="176" textAnchor="middle" fontSize="12" fill="#75675F">{p.label}</text>
+        <text key={i} x={xOf(i)} y="176" textAnchor="middle" fontSize="12" fill="#52637A">{p.label}</text>
       ))}
     </svg>
   );
