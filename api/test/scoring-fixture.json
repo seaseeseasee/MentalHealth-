@@ -1,0 +1,1382 @@
+[
+ {
+  "id": "thi15",
+  "sex": null,
+  "answers": [
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0
+  ],
+  "expected": {
+   "score": 9,
+   "max": 45,
+   "level": "moderate",
+   "label": "ต่ำกว่าคนทั่วไป",
+   "crisis": false,
+   "domains": []
+  }
+ },
+ {
+  "id": "thi15",
+  "sex": null,
+  "answers": [
+   1,
+   1,
+   1,
+   1,
+   1,
+   1,
+   1,
+   1,
+   1,
+   1,
+   1,
+   1,
+   1,
+   1,
+   1
+  ],
+  "expected": {
+   "score": 18,
+   "max": 45,
+   "level": "moderate",
+   "label": "ต่ำกว่าคนทั่วไป",
+   "crisis": false,
+   "domains": []
+  }
+ },
+ {
+  "id": "thi15",
+  "sex": null,
+  "answers": [
+   2,
+   2,
+   2,
+   2,
+   2,
+   2,
+   2,
+   2,
+   2,
+   2,
+   2,
+   2,
+   2,
+   2,
+   2
+  ],
+  "expected": {
+   "score": 27,
+   "max": 45,
+   "level": "moderate",
+   "label": "ต่ำกว่าคนทั่วไป",
+   "crisis": false,
+   "domains": []
+  }
+ },
+ {
+  "id": "thi15",
+  "sex": null,
+  "answers": [
+   3,
+   3,
+   3,
+   3,
+   3,
+   3,
+   3,
+   3,
+   3,
+   3,
+   3,
+   3,
+   3,
+   3,
+   3
+  ],
+  "expected": {
+   "score": 36,
+   "max": 45,
+   "level": "good",
+   "label": "ดีกว่าคนทั่วไป",
+   "crisis": false,
+   "domains": []
+  }
+ },
+ {
+  "id": "thi15",
+  "sex": null,
+  "answers": [
+   0,
+   1,
+   2,
+   3,
+   0,
+   1,
+   2,
+   3,
+   0,
+   1,
+   2,
+   3,
+   0,
+   1,
+   2
+  ],
+  "expected": {
+   "score": 22,
+   "max": 45,
+   "level": "moderate",
+   "label": "ต่ำกว่าคนทั่วไป",
+   "crisis": false,
+   "domains": []
+  }
+ },
+ {
+  "id": "thi15",
+  "sex": null,
+  "answers": [
+   3,
+   2,
+   1,
+   0,
+   3,
+   2,
+   1,
+   0,
+   3,
+   2,
+   1,
+   0,
+   3,
+   2,
+   1
+  ],
+  "expected": {
+   "score": 23,
+   "max": 45,
+   "level": "moderate",
+   "label": "ต่ำกว่าคนทั่วไป",
+   "crisis": false,
+   "domains": []
+  }
+ },
+ {
+  "id": "st5",
+  "sex": null,
+  "answers": [
+   0,
+   0,
+   0,
+   0,
+   0
+  ],
+  "expected": {
+   "score": 0,
+   "max": 15,
+   "level": "good",
+   "label": "เครียดน้อย",
+   "crisis": false,
+   "domains": []
+  }
+ },
+ {
+  "id": "st5",
+  "sex": null,
+  "answers": [
+   1,
+   1,
+   1,
+   1,
+   1
+  ],
+  "expected": {
+   "score": 5,
+   "max": 15,
+   "level": "mild",
+   "label": "เครียดปานกลาง",
+   "crisis": false,
+   "domains": []
+  }
+ },
+ {
+  "id": "st5",
+  "sex": null,
+  "answers": [
+   2,
+   2,
+   2,
+   2,
+   2
+  ],
+  "expected": {
+   "score": 10,
+   "max": 15,
+   "level": "severe",
+   "label": "เครียดมากที่สุด",
+   "crisis": false,
+   "domains": []
+  }
+ },
+ {
+  "id": "st5",
+  "sex": null,
+  "answers": [
+   3,
+   3,
+   3,
+   3,
+   3
+  ],
+  "expected": {
+   "score": 15,
+   "max": 15,
+   "level": "severe",
+   "label": "เครียดมากที่สุด",
+   "crisis": false,
+   "domains": []
+  }
+ },
+ {
+  "id": "st5",
+  "sex": null,
+  "answers": [
+   0,
+   1,
+   2,
+   3,
+   0
+  ],
+  "expected": {
+   "score": 6,
+   "max": 15,
+   "level": "mild",
+   "label": "เครียดปานกลาง",
+   "crisis": false,
+   "domains": []
+  }
+ },
+ {
+  "id": "st5",
+  "sex": null,
+  "answers": [
+   3,
+   2,
+   1,
+   0,
+   3
+  ],
+  "expected": {
+   "score": 9,
+   "max": 15,
+   "level": "moderate",
+   "label": "เครียดมาก",
+   "crisis": false,
+   "domains": []
+  }
+ },
+ {
+  "id": "phq9",
+  "sex": null,
+  "answers": [
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0
+  ],
+  "expected": {
+   "score": 0,
+   "max": 27,
+   "level": "good",
+   "label": "ไม่มีหรือมีน้อยมาก",
+   "crisis": false,
+   "domains": []
+  }
+ },
+ {
+  "id": "phq9",
+  "sex": null,
+  "answers": [
+   1,
+   1,
+   1,
+   1,
+   1,
+   1,
+   1,
+   1,
+   1
+  ],
+  "expected": {
+   "score": 9,
+   "max": 27,
+   "level": "mild",
+   "label": "ระดับเล็กน้อย",
+   "crisis": true,
+   "domains": []
+  }
+ },
+ {
+  "id": "phq9",
+  "sex": null,
+  "answers": [
+   2,
+   2,
+   2,
+   2,
+   2,
+   2,
+   2,
+   2,
+   2
+  ],
+  "expected": {
+   "score": 18,
+   "max": 27,
+   "level": "severe",
+   "label": "ค่อนข้างรุนแรง",
+   "crisis": true,
+   "domains": []
+  }
+ },
+ {
+  "id": "phq9",
+  "sex": null,
+  "answers": [
+   3,
+   3,
+   3,
+   3,
+   3,
+   3,
+   3,
+   3,
+   3
+  ],
+  "expected": {
+   "score": 27,
+   "max": 27,
+   "level": "severe",
+   "label": "ระดับรุนแรง",
+   "crisis": true,
+   "domains": []
+  }
+ },
+ {
+  "id": "phq9",
+  "sex": null,
+  "answers": [
+   0,
+   1,
+   2,
+   3,
+   0,
+   1,
+   2,
+   3,
+   0
+  ],
+  "expected": {
+   "score": 12,
+   "max": 27,
+   "level": "moderate",
+   "label": "ระดับปานกลาง",
+   "crisis": false,
+   "domains": []
+  }
+ },
+ {
+  "id": "phq9",
+  "sex": null,
+  "answers": [
+   3,
+   2,
+   1,
+   0,
+   3,
+   2,
+   1,
+   0,
+   3
+  ],
+  "expected": {
+   "score": 15,
+   "max": 27,
+   "level": "severe",
+   "label": "ค่อนข้างรุนแรง",
+   "crisis": true,
+   "domains": []
+  }
+ },
+ {
+  "id": "eq",
+  "sex": null,
+  "answers": [
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0
+  ],
+  "expected": {
+   "score": 0,
+   "max": 45,
+   "level": "moderate",
+   "label": "ควรพัฒนา",
+   "crisis": false,
+   "domains": [
+    {
+     "id": "good",
+     "label": "ดี",
+     "score": 0,
+     "max": 15
+    },
+    {
+     "id": "smart",
+     "label": "เก่ง",
+     "score": 0,
+     "max": 15
+    },
+    {
+     "id": "happy",
+     "label": "สุข",
+     "score": 0,
+     "max": 15
+    }
+   ]
+  }
+ },
+ {
+  "id": "eq",
+  "sex": null,
+  "answers": [
+   1,
+   1,
+   1,
+   1,
+   1,
+   1,
+   1,
+   1,
+   1,
+   1,
+   1,
+   1,
+   1,
+   1,
+   1
+  ],
+  "expected": {
+   "score": 15,
+   "max": 45,
+   "level": "moderate",
+   "label": "ควรพัฒนา",
+   "crisis": false,
+   "domains": [
+    {
+     "id": "good",
+     "label": "ดี",
+     "score": 5,
+     "max": 15
+    },
+    {
+     "id": "smart",
+     "label": "เก่ง",
+     "score": 5,
+     "max": 15
+    },
+    {
+     "id": "happy",
+     "label": "สุข",
+     "score": 5,
+     "max": 15
+    }
+   ]
+  }
+ },
+ {
+  "id": "eq",
+  "sex": null,
+  "answers": [
+   2,
+   2,
+   2,
+   2,
+   2,
+   2,
+   2,
+   2,
+   2,
+   2,
+   2,
+   2,
+   2,
+   2,
+   2
+  ],
+  "expected": {
+   "score": 30,
+   "max": 45,
+   "level": "mild",
+   "label": "ระดับปกติ",
+   "crisis": false,
+   "domains": [
+    {
+     "id": "good",
+     "label": "ดี",
+     "score": 10,
+     "max": 15
+    },
+    {
+     "id": "smart",
+     "label": "เก่ง",
+     "score": 10,
+     "max": 15
+    },
+    {
+     "id": "happy",
+     "label": "สุข",
+     "score": 10,
+     "max": 15
+    }
+   ]
+  }
+ },
+ {
+  "id": "eq",
+  "sex": null,
+  "answers": [
+   3,
+   3,
+   3,
+   3,
+   3,
+   3,
+   3,
+   3,
+   3,
+   3,
+   3,
+   3,
+   3,
+   3,
+   3
+  ],
+  "expected": {
+   "score": 45,
+   "max": 45,
+   "level": "good",
+   "label": "ระดับสูง",
+   "crisis": false,
+   "domains": [
+    {
+     "id": "good",
+     "label": "ดี",
+     "score": 15,
+     "max": 15
+    },
+    {
+     "id": "smart",
+     "label": "เก่ง",
+     "score": 15,
+     "max": 15
+    },
+    {
+     "id": "happy",
+     "label": "สุข",
+     "score": 15,
+     "max": 15
+    }
+   ]
+  }
+ },
+ {
+  "id": "eq",
+  "sex": null,
+  "answers": [
+   0,
+   1,
+   2,
+   3,
+   0,
+   1,
+   2,
+   3,
+   0,
+   1,
+   2,
+   3,
+   0,
+   1,
+   2
+  ],
+  "expected": {
+   "score": 21,
+   "max": 45,
+   "level": "moderate",
+   "label": "ควรพัฒนา",
+   "crisis": false,
+   "domains": [
+    {
+     "id": "good",
+     "label": "ดี",
+     "score": 6,
+     "max": 15
+    },
+    {
+     "id": "smart",
+     "label": "เก่ง",
+     "score": 7,
+     "max": 15
+    },
+    {
+     "id": "happy",
+     "label": "สุข",
+     "score": 8,
+     "max": 15
+    }
+   ]
+  }
+ },
+ {
+  "id": "eq",
+  "sex": null,
+  "answers": [
+   3,
+   2,
+   1,
+   0,
+   3,
+   2,
+   1,
+   0,
+   3,
+   2,
+   1,
+   0,
+   3,
+   2,
+   1
+  ],
+  "expected": {
+   "score": 24,
+   "max": 45,
+   "level": "mild",
+   "label": "ระดับปกติ",
+   "crisis": false,
+   "domains": [
+    {
+     "id": "good",
+     "label": "ดี",
+     "score": 9,
+     "max": 15
+    },
+    {
+     "id": "smart",
+     "label": "เก่ง",
+     "score": 8,
+     "max": 15
+    },
+    {
+     "id": "happy",
+     "label": "สุข",
+     "score": 7,
+     "max": 15
+    }
+   ]
+  }
+ },
+ {
+  "id": "rq",
+  "sex": null,
+  "answers": [
+   0,
+   0,
+   0,
+   0,
+   0
+  ],
+  "expected": {
+   "score": 0,
+   "max": 15,
+   "level": "moderate",
+   "label": "ควรเสริมพลังใจ",
+   "crisis": false,
+   "domains": []
+  }
+ },
+ {
+  "id": "rq",
+  "sex": null,
+  "answers": [
+   1,
+   1,
+   1,
+   1,
+   1
+  ],
+  "expected": {
+   "score": 5,
+   "max": 15,
+   "level": "moderate",
+   "label": "ควรเสริมพลังใจ",
+   "crisis": false,
+   "domains": []
+  }
+ },
+ {
+  "id": "rq",
+  "sex": null,
+  "answers": [
+   2,
+   2,
+   2,
+   2,
+   2
+  ],
+  "expected": {
+   "score": 10,
+   "max": 15,
+   "level": "mild",
+   "label": "ระดับปานกลาง",
+   "crisis": false,
+   "domains": []
+  }
+ },
+ {
+  "id": "rq",
+  "sex": null,
+  "answers": [
+   3,
+   3,
+   3,
+   3,
+   3
+  ],
+  "expected": {
+   "score": 15,
+   "max": 15,
+   "level": "good",
+   "label": "พลังใจดี",
+   "crisis": false,
+   "domains": []
+  }
+ },
+ {
+  "id": "rq",
+  "sex": null,
+  "answers": [
+   0,
+   1,
+   2,
+   3,
+   0
+  ],
+  "expected": {
+   "score": 6,
+   "max": 15,
+   "level": "mild",
+   "label": "ระดับปานกลาง",
+   "crisis": false,
+   "domains": []
+  }
+ },
+ {
+  "id": "rq",
+  "sex": null,
+  "answers": [
+   3,
+   2,
+   1,
+   0,
+   3
+  ],
+  "expected": {
+   "score": 9,
+   "max": 15,
+   "level": "mild",
+   "label": "ระดับปานกลาง",
+   "crisis": false,
+   "domains": []
+  }
+ },
+ {
+  "id": "auditc",
+  "sex": "male",
+  "answers": [
+   0,
+   0,
+   0
+  ],
+  "expected": {
+   "score": 0,
+   "max": 12,
+   "level": "good",
+   "label": "ความเสี่ยงต่ำ",
+   "crisis": false,
+   "domains": []
+  }
+ },
+ {
+  "id": "auditc",
+  "sex": "male",
+  "answers": [
+   1,
+   1,
+   1
+  ],
+  "expected": {
+   "score": 3,
+   "max": 12,
+   "level": "good",
+   "label": "ความเสี่ยงต่ำ",
+   "crisis": false,
+   "domains": []
+  }
+ },
+ {
+  "id": "auditc",
+  "sex": "male",
+  "answers": [
+   2,
+   2,
+   2
+  ],
+  "expected": {
+   "score": 6,
+   "max": 12,
+   "level": "moderate",
+   "label": "ดื่มแบบเสี่ยง",
+   "crisis": false,
+   "domains": []
+  }
+ },
+ {
+  "id": "auditc",
+  "sex": "male",
+  "answers": [
+   4,
+   4,
+   4
+  ],
+  "expected": {
+   "score": 12,
+   "max": 12,
+   "level": "severe",
+   "label": "ความเสี่ยงสูง",
+   "crisis": false,
+   "domains": []
+  }
+ },
+ {
+  "id": "auditc",
+  "sex": "male",
+  "answers": [
+   0,
+   1,
+   2
+  ],
+  "expected": {
+   "score": 3,
+   "max": 12,
+   "level": "good",
+   "label": "ความเสี่ยงต่ำ",
+   "crisis": false,
+   "domains": []
+  }
+ },
+ {
+  "id": "auditc",
+  "sex": "male",
+  "answers": [
+   4,
+   3,
+   2
+  ],
+  "expected": {
+   "score": 9,
+   "max": 12,
+   "level": "severe",
+   "label": "ความเสี่ยงสูง",
+   "crisis": false,
+   "domains": []
+  }
+ },
+ {
+  "id": "auditc",
+  "sex": "female",
+  "answers": [
+   0,
+   0,
+   0
+  ],
+  "expected": {
+   "score": 0,
+   "max": 12,
+   "level": "good",
+   "label": "ความเสี่ยงต่ำ",
+   "crisis": false,
+   "domains": []
+  }
+ },
+ {
+  "id": "auditc",
+  "sex": "female",
+  "answers": [
+   1,
+   1,
+   1
+  ],
+  "expected": {
+   "score": 3,
+   "max": 12,
+   "level": "moderate",
+   "label": "ดื่มแบบเสี่ยง",
+   "crisis": false,
+   "domains": []
+  }
+ },
+ {
+  "id": "auditc",
+  "sex": "female",
+  "answers": [
+   2,
+   2,
+   2
+  ],
+  "expected": {
+   "score": 6,
+   "max": 12,
+   "level": "moderate",
+   "label": "ดื่มแบบเสี่ยง",
+   "crisis": false,
+   "domains": []
+  }
+ },
+ {
+  "id": "auditc",
+  "sex": "female",
+  "answers": [
+   4,
+   4,
+   4
+  ],
+  "expected": {
+   "score": 12,
+   "max": 12,
+   "level": "severe",
+   "label": "ความเสี่ยงสูง",
+   "crisis": false,
+   "domains": []
+  }
+ },
+ {
+  "id": "auditc",
+  "sex": "female",
+  "answers": [
+   0,
+   1,
+   2
+  ],
+  "expected": {
+   "score": 3,
+   "max": 12,
+   "level": "moderate",
+   "label": "ดื่มแบบเสี่ยง",
+   "crisis": false,
+   "domains": []
+  }
+ },
+ {
+  "id": "auditc",
+  "sex": "female",
+  "answers": [
+   4,
+   3,
+   2
+  ],
+  "expected": {
+   "score": 9,
+   "max": 12,
+   "level": "severe",
+   "label": "ความเสี่ยงสูง",
+   "crisis": false,
+   "domains": []
+  }
+ },
+ {
+  "id": "digital",
+  "sex": null,
+  "answers": [
+   0,
+   0,
+   0,
+   0,
+   0,
+   0
+  ],
+  "expected": {
+   "score": 0,
+   "max": 18,
+   "level": "good",
+   "label": "ความเสี่ยงต่ำ",
+   "crisis": false,
+   "domains": []
+  }
+ },
+ {
+  "id": "digital",
+  "sex": null,
+  "answers": [
+   1,
+   1,
+   1,
+   1,
+   1,
+   1
+  ],
+  "expected": {
+   "score": 6,
+   "max": 18,
+   "level": "mild",
+   "label": "เริ่มมีความเสี่ยง",
+   "crisis": false,
+   "domains": []
+  }
+ },
+ {
+  "id": "digital",
+  "sex": null,
+  "answers": [
+   2,
+   2,
+   2,
+   2,
+   2,
+   2
+  ],
+  "expected": {
+   "score": 12,
+   "max": 18,
+   "level": "severe",
+   "label": "ความเสี่ยงสูง",
+   "crisis": false,
+   "domains": []
+  }
+ },
+ {
+  "id": "digital",
+  "sex": null,
+  "answers": [
+   3,
+   3,
+   3,
+   3,
+   3,
+   3
+  ],
+  "expected": {
+   "score": 18,
+   "max": 18,
+   "level": "severe",
+   "label": "ความเสี่ยงสูง",
+   "crisis": false,
+   "domains": []
+  }
+ },
+ {
+  "id": "digital",
+  "sex": null,
+  "answers": [
+   0,
+   1,
+   2,
+   3,
+   0,
+   1
+  ],
+  "expected": {
+   "score": 7,
+   "max": 18,
+   "level": "mild",
+   "label": "เริ่มมีความเสี่ยง",
+   "crisis": false,
+   "domains": []
+  }
+ },
+ {
+  "id": "digital",
+  "sex": null,
+  "answers": [
+   3,
+   2,
+   1,
+   0,
+   3,
+   2
+  ],
+  "expected": {
+   "score": 11,
+   "max": 18,
+   "level": "mild",
+   "label": "เริ่มมีความเสี่ยง",
+   "crisis": false,
+   "domains": []
+  }
+ },
+ {
+  "id": "memory",
+  "sex": null,
+  "answers": [
+   0,
+   0,
+   0,
+   0,
+   0
+  ],
+  "expected": {
+   "score": 0,
+   "max": 15,
+   "level": "good",
+   "label": "ปกติ",
+   "crisis": false,
+   "domains": []
+  }
+ },
+ {
+  "id": "memory",
+  "sex": null,
+  "answers": [
+   1,
+   1,
+   1,
+   1,
+   1
+  ],
+  "expected": {
+   "score": 5,
+   "max": 15,
+   "level": "mild",
+   "label": "ควรสังเกต",
+   "crisis": false,
+   "domains": []
+  }
+ },
+ {
+  "id": "memory",
+  "sex": null,
+  "answers": [
+   2,
+   2,
+   2,
+   2,
+   2
+  ],
+  "expected": {
+   "score": 10,
+   "max": 15,
+   "level": "moderate",
+   "label": "ควรปรึกษาผู้เชี่ยวชาญ",
+   "crisis": false,
+   "domains": []
+  }
+ },
+ {
+  "id": "memory",
+  "sex": null,
+  "answers": [
+   3,
+   3,
+   3,
+   3,
+   3
+  ],
+  "expected": {
+   "score": 15,
+   "max": 15,
+   "level": "moderate",
+   "label": "ควรปรึกษาผู้เชี่ยวชาญ",
+   "crisis": false,
+   "domains": []
+  }
+ },
+ {
+  "id": "memory",
+  "sex": null,
+  "answers": [
+   0,
+   1,
+   2,
+   3,
+   0
+  ],
+  "expected": {
+   "score": 6,
+   "max": 15,
+   "level": "mild",
+   "label": "ควรสังเกต",
+   "crisis": false,
+   "domains": []
+  }
+ },
+ {
+  "id": "memory",
+  "sex": null,
+  "answers": [
+   3,
+   2,
+   1,
+   0,
+   3
+  ],
+  "expected": {
+   "score": 9,
+   "max": 15,
+   "level": "mild",
+   "label": "ควรสังเกต",
+   "crisis": false,
+   "domains": []
+  }
+ },
+ {
+  "id": "burnout",
+  "sex": null,
+  "answers": [
+   0,
+   0,
+   0,
+   0,
+   0
+  ],
+  "expected": {
+   "score": 0,
+   "max": 15,
+   "level": "good",
+   "label": "ไฟยังเต็ม",
+   "crisis": false,
+   "domains": []
+  }
+ },
+ {
+  "id": "burnout",
+  "sex": null,
+  "answers": [
+   1,
+   1,
+   1,
+   1,
+   1
+  ],
+  "expected": {
+   "score": 5,
+   "max": 15,
+   "level": "mild",
+   "label": "เริ่มหมดไฟ",
+   "crisis": false,
+   "domains": []
+  }
+ },
+ {
+  "id": "burnout",
+  "sex": null,
+  "answers": [
+   2,
+   2,
+   2,
+   2,
+   2
+  ],
+  "expected": {
+   "score": 10,
+   "max": 15,
+   "level": "severe",
+   "label": "หมดไฟสูง",
+   "crisis": false,
+   "domains": []
+  }
+ },
+ {
+  "id": "burnout",
+  "sex": null,
+  "answers": [
+   3,
+   3,
+   3,
+   3,
+   3
+  ],
+  "expected": {
+   "score": 15,
+   "max": 15,
+   "level": "severe",
+   "label": "หมดไฟสูง",
+   "crisis": false,
+   "domains": []
+  }
+ },
+ {
+  "id": "burnout",
+  "sex": null,
+  "answers": [
+   0,
+   1,
+   2,
+   3,
+   0
+  ],
+  "expected": {
+   "score": 6,
+   "max": 15,
+   "level": "mild",
+   "label": "เริ่มหมดไฟ",
+   "crisis": false,
+   "domains": []
+  }
+ },
+ {
+  "id": "burnout",
+  "sex": null,
+  "answers": [
+   3,
+   2,
+   1,
+   0,
+   3
+  ],
+  "expected": {
+   "score": 9,
+   "max": 15,
+   "level": "mild",
+   "label": "เริ่มหมดไฟ",
+   "crisis": false,
+   "domains": []
+  }
+ }
+]
