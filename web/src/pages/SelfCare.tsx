@@ -91,7 +91,7 @@ function BreathingCard() {
       <div className="breath-ring-wrap">
         <div className="breath-ring-dash" />
         <div aria-hidden="true" className="breath-ring-fill" style={{ transform: `scale(${scale})`, transition: `transform ${running ? phase.secs : 0.4}s ease-in-out` }} />
-        <img src="/illustrations/hug.webp" alt="" width="120" height="155" className="breath-ring-img" />
+        <img src="/illustrations/plant.webp" alt="" width="300" height="408" className="breath-ring-img" />
       </div>
     </section>
   );

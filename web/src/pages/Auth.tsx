@@ -23,7 +23,7 @@ function AuthShell({ title, subtitle, children, footer }: { title: string; subti
           <p className="auth-art-title">ดูแลใจ…ให้แข็งแรง</p>
           <p className="auth-art-sub">เริ่มได้จากการประเมินตัวเอง</p>
         </div>
-        <img src="/illustrations/hug.webp" alt="" width="382" height="495" className="auth-art-img" />
+        <img src="/illustrations/wave.webp" alt="" width="465" height="496" className="auth-art-img" />
         <ul className="auth-points">
           {POINTS.map((p) => (
             <li key={p.text}><span className="icon-circle" style={{ width: 34, height: 34, background: p.bg }}><Icon name={p.icon} size={17} /></span>{p.text}</li>
