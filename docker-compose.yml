@@ -9,6 +9,8 @@ services:
       NODE_ENV: production
       DB_PATH: /data/mindease.db
       COOKIE_SECURE: ${COOKIE_SECURE:-false}
+      # Comma-separated e-mails promoted to admin on start/registration (never demotes)
+      ADMIN_EMAILS: ${ADMIN_EMAILS:-}
     volumes:
       - mindease-data:/data
     restart: unless-stopped
