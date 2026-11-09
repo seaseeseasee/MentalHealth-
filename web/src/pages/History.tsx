@@ -44,19 +44,52 @@ export function History() {
   const listed = results.filter((r) => listFilter === 'all' || r.assessmentId === listFilter);
 
   return (
-    <main className="screen wide history">
-      <header className="history-hero">
-        <div className="grow" style={{ minWidth: 0, padding: '18px 0' }}>
-          <h1 className="h1">ประวัติและแนวโน้ม</h1>
-          <p className="small muted" style={{ margin: '2px 0 12px' }}>ดูการเปลี่ยนแปลงของใจคุณตามเวลา</p>
-          <div className="history-sum">
-            <div><b>{results.length}</b><span>ครั้งที่ประเมิน</span></div>
-            <div><b>{taken.length}</b><span>แบบที่เคยทำ</span></div>
-            <div><b>{results[0] ? thaiDate(results[0].createdAt, false) : '–'}</b><span>ครั้งล่าสุด</span></div>
+    <main className="screen wide signed-in history">
+      <section className="hero">
+        <div className="hero-grid">
+          <div className="hero-copy">
+            <p className="hero-sub" style={{ color: 'var(--muted)', margin: '0 0 6px' }}>ดูการเปลี่ยนแปลงของใจคุณตามเวลา</p>
+            <h1 className="hero-title home-title">ประวัติ<br /><span>และแนวโน้มของคุณ</span></h1>
+            <p className="hero-lead">ทุกก้าวเล็กๆ มีความหมาย</p>
+            <p className="hero-meta">เทียบผลแต่ละครั้งกับช่วงระดับผลของแบบประเมิน และกลับไปดูรายละเอียดได้ทุกเมื่อ</p>
+          </div>
+          <div className="hero-art">
+            <div className="hero-bubble">เก่งมากที่ดูแลใจ<br />อย่างสม่ำเสมอ <span style={{ color: '#E5566F' }}>♥</span></div>
+            <img src="/illustrations/cheer.webp" alt="ตัวละครคู่ใจ MindEase ชูมือดีใจ" width="525" height="497" />
           </div>
         </div>
-        <img src="/illustrations/cheer.webp" alt="" width="170" height="160" className="history-hero-img" />
-      </header>
+
+        <div className="hero-features">
+          <div className="feature">
+            <span className="icon-circle" style={{ background: '#2E9E62' }}><Icon name="check" size={22} strokeWidth={2.4} /></span>
+            <span><b>{results.length} ครั้ง</b><span>ประเมินแล้วทั้งหมด</span></span>
+          </div>
+          <div className="feature">
+            <span className="icon-circle" style={{ background: '#1E63C4' }}><Icon name="tests" size={22} /></span>
+            <span><b>{taken.length} แบบ</b><span>แบบประเมินที่เคยทำ</span></span>
+          </div>
+          {results[0] && getAssessment(results[0].assessmentId) ? (
+            <Link to={`/results/${results[0].id}`} className="feature" style={{ textDecoration: 'none', color: 'var(--ink)' }}>
+              <AssessmentIcon id={results[0].assessmentId} icon={getAssessment(results[0].assessmentId)!.icon} size={46} />
+              <span className="grow" style={{ minWidth: 0 }}>
+                <b>{getAssessment(results[0].assessmentId)!.code} · {results[0].score}/{results[0].max}</b>
+                <span>ครั้งล่าสุด · {thaiDate(results[0].createdAt)}</span>
+              </span>
+              <LevelChip level={results[0].level} label={results[0].bandLabel} />
+            </Link>
+          ) : (
+            <div className="feature">
+              <span className="icon-circle" style={{ background: '#7A58D6' }}><Icon name="history" size={22} /></span>
+              <span><b>ยังไม่มีประวัติ</b><span>ผลจะแสดงที่นี่หลังทำแบบประเมิน</span></span>
+            </div>
+          )}
+        </div>
+
+        <div className="hero-cta">
+          <Link to="/assessments" className="btn btn-primary btn-lg">ทำแบบประเมินอีกครั้ง <Icon name="arrow" size={20} strokeWidth={2.4} /></Link>
+          <span className="small"><Link to="/home" style={{ fontWeight: 600 }}>กลับหน้าหลัก</Link></span>
+        </div>
+      </section>
 
       {results.length === 0 ? (
         <div className="card" style={{ textAlign: 'center', padding: 28 }}>

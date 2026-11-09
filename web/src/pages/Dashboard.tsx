@@ -53,7 +53,7 @@ export function Dashboard() {
   const latestDef = latest ? getAssessment(latest.assessmentId) : undefined;
 
   return (
-    <main className="screen wide home">
+    <main className="screen wide signed-in">
       <section className="hero">
         <div className="hero-grid">
           <div className="hero-copy">
